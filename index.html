@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>我的专属漫画阁-瀑布流手账版</title>
+  <title>漫画印象阁</title>
   <style>
     :root {
       --bg: #f5f2eb;          /* 带有温度的复古日系纸张色 */
@@ -490,29 +490,24 @@
       
       <div class="sidebar-wrapper">
         <div class="brand">
-          <h1>漫画收藏阁</h1>
-          <p>动态瀑布流手账风。卡片格子随心呼吸，高矮胖瘦各凭所愿。</p>
+          <h1>漫画印象阁</h1>
+          <p>仅作个人纪录用，不含客观意见。</p>
         </div>
 
         <div class="section-title">漫画分类</div>
         <div id="subCategoryNav" class="nav-group"></div>
-
-        <div class="sidebar-footer">
-          静态漫画展示站。<br />
-          无论是主面板按钮还是侧边栏右上角的 ✕，均可一键操控菜单。
-        </div>
       </div>
     </aside>
 
     <main class="main">
       <section class="panel control-panel">
         <div class="custom-intro">
-          <p>✨ 欢迎来到我的私人漫画收纳所！文字越长，卡片越长，打破千篇一律。 ✨</p>
+          <p>既然来了总之就是听我的电波吧！</p>
         </div>
 
         <div class="control-row">
           <button id="toggleSidebar" class="sort-btn">📂 收起侧边栏</button>
-          <input id="searchInput" class="search" type="text" placeholder="搜索漫画名称、标签或简介..." />
+          <input id="searchInput" class="search" type="text" placeholder="这个是搜索栏，我也不知道它为什么要存在、可以搜什么……" />
         </div>
         <div class="control-row">
           <button class="sort-btn active" data-sort="rating-desc">评分从高到低</button>
@@ -532,7 +527,7 @@
       <section id="cardGrid" class="grid"></section>
       <div id="emptyState" class="empty" style="display:none;">没有找到符合过滤条件的漫画。</div>
 
-      <div class="footer-note">建议部署到 GitHub Pages 时保留为单页入口：<code>index.html</code>。</div>
+      <div class="footer-note">页面底端是不是得写点什么，那就说所有图片来源于网络，侵权删。</div>
     </main>
   </div>
 
@@ -544,7 +539,7 @@
         title: "海贼王", 
         sub: "冒险", 
         rating: 5, 
-        cover: "", 
+        cover: "./images/test.png", 
         desc: "连载数十载的伟大气史诗巨作！\n尾田荣一郎构筑了让人叹为观止的极\n分镜张力的把控已经\n到了化境。尤其是全国大赛\n阶段，最后那几分钟几\n乎完度庞大世界观，空岛篇的浪漫、司法岛的决绝、顶上战争的宏大，再到一个个精妙绝伦的伏笔跨越数百年在如今收拢。这不仅仅是一部漫画，更是长达二十多年的漫长陪伴。每一次看依然会为了当年的热血和梦想而感动落泪。属于男人的极致浪漫莫过于此！", 
         effect: "",
         url: "#" 
@@ -579,7 +574,7 @@
       },
       { 
         title: "过家家", 
-        sub: "喜剧", 
+        sub: "搞笑", 
         rating: 4, 
         cover: "", 
         desc: "顶尖特工、杀手组织与读心术女儿构成的爆笑伪装家庭日常，阿尼亚可爱就完事了！", 
