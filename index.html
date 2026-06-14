@@ -6,15 +6,14 @@
   <title>我的专属漫画阁</title>
   <style>
     :root {
-      --bg: #fff8f1;
-      --panel: rgba(255, 255, 255, 0.84);
-      --text: #2e241b;
-      --muted: #8b7663;
-      --line: rgba(80, 55, 28, 0.08);
-      --accent: #f2a65a;
-      --accent-gradient: linear-gradient(135deg, #f2a65a, #ff7b00);
-      --shadow: 0 12px 30px rgba(113, 76, 35, 0.10);
-      --radius: 22px;
+      --bg: #f7f5f0;          /* 高级日系纯色底色 */
+      --panel: #ffffff;       /* 纯白面板 */
+      --text: #241e1a;
+      --muted: #786c64;
+      --line: #e6e2db;        /* 干净平整的纯色边框线 */
+      --accent: #d96a43;      /* 优雅平整的砖橙色 */
+      --shadow: 0 6px 20px rgba(40, 30, 20, 0.05);
+      --radius: 16px;
     }
 
     * { box-sizing: border-box; }
@@ -23,19 +22,15 @@
       margin: 0;
       font-family: Inter, "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
       color: var(--text);
-      background:
-        radial-gradient(circle at top left, rgba(255, 214, 170, 0.38), transparent 26%),
-        radial-gradient(circle at top right, rgba(242, 166, 90, 0.14), transparent 22%),
-        linear-gradient(180deg, #fffaf4 0%, #fff2e6 100%);
+      background: var(--bg);
     }
 
-    /* 布局：使用 flex 布局，方便侧边栏收起 */
     .app {
       display: flex;
       min-height: 100vh;
     }
 
-    /* 侧边栏及收起过渡效果 */
+    /* 侧边栏基础架构 */
     .sidebar {
       position: sticky;
       top: 0;
@@ -44,20 +39,44 @@
       flex-shrink: 0;
       padding: 28px 20px;
       border-right: 1px solid var(--line);
-      background: rgba(255, 249, 241, 0.78);
-      backdrop-filter: blur(18px);
+      background: #ffffff;
       transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-                  padding 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-                  border-color 0.3s ease;
+                  padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       overflow: hidden;
-      z-index: 100;
+      z-index: 1000;
     }
 
     .sidebar-wrapper {
       width: 240px;
     }
 
-    /* 侧边栏收起后的控制状态 */
+    /* 💡【核心新增】侧边栏右上角 Gemini 同款收起按钮 */
+    .sidebar-close-btn {
+      position: absolute;
+      top: 24px;
+      right: 20px;
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      z-index: 1010;
+    }
+    .sidebar-close-btn:hover {
+      background: #faf9f6;
+      color: var(--text);
+      border-color: var(--muted);
+    }
+
+    /* PC端收起状态 */
     .app.sidebar-collapsed .sidebar {
       width: 0;
       padding-left: 0;
@@ -66,13 +85,13 @@
     }
 
     .brand {
-      padding: 10px 8px 20px;
+      padding: 10px 30px 20px 8px; /* 右边留出空隙给收起按钮 */
       margin-bottom: 12px;
     }
 
     .brand h1 {
       margin: 0 0 8px;
-      font-size: 26px;
+      font-size: 24px;
       letter-spacing: 0.4px;
     }
 
@@ -100,43 +119,38 @@
     .sub-btn, .sort-btn {
       border: 1px solid transparent;
       cursor: pointer;
-      transition: all 0.25s ease;
+      transition: all 0.2s ease;
       user-select: none;
-    }
-
-    /* 分类按钮悬停 */
-    .sub-btn:hover {
-      background: var(--accent-gradient);
-      color: #fff !important;
-      border-color: transparent;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(242, 166, 90, 0.35);
     }
 
     .sub-btn {
       width: 100%;
       text-align: left;
       padding: 12px 14px;
-      border-radius: 14px;
-      background: rgba(255, 252, 248, 0.82);
+      border-radius: 10px;
+      background: #faf9f6;
       color: var(--muted);
       font-size: 14px;
-      border-color: var(--line);
+      border: 1px solid var(--line);
+    }
+
+    .sub-btn:hover {
+      background: #f0ede6;
+      color: var(--text);
     }
 
     .sub-btn.active {
-      background: #fff;
-      color: var(--text);
-      border-color: rgba(242, 166, 90, 0.35);
-      box-shadow: var(--shadow);
+      background: var(--accent);
+      color: #ffffff !important;
+      border-color: transparent;
       font-weight: bold;
     }
 
     .sidebar-footer {
       margin-top: 24px;
       padding: 16px 14px;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.72);
+      border-radius: 12px;
+      background: #faf9f6;
       border: 1px solid var(--line);
       color: var(--muted);
       font-size: 13px;
@@ -149,7 +163,6 @@
       padding: 28px; 
     }
 
-    /* 核心面板结构 */
     .control-panel {
       padding: 20px;
       display: grid;
@@ -158,23 +171,21 @@
       border: 1px solid var(--line);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(18px);
       margin-bottom: 22px;
     }
 
-    /* 自定义介绍文字区域样式 */
     .custom-intro {
-      background: linear-gradient(90deg, rgba(242,166,90,0.06), rgba(255,215,173,0.12));
+      background: #fff3f0;
       border-left: 4px solid var(--accent);
       padding: 12px 16px;
-      border-radius: 10px;
+      border-radius: 8px;
     }
     .custom-intro p {
       margin: 0;
       font-size: 14px;
       line-height: 1.6;
-      color: #73563c;
-      font-weight: 500;
+      color: #8c432b;
+      font-weight: bold;
     }
 
     .control-row {
@@ -187,51 +198,36 @@
     .search {
       flex: 1;
       border: 1px solid var(--line);
-      background: rgba(255,255,255,0.88);
-      border-radius: 14px;
+      background: #ffffff;
+      border-radius: 10px;
       padding: 12px 14px;
       font-size: 14px;
       outline: none;
       color: var(--text);
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
     }
 
     .search:focus { 
       border-color: var(--accent); 
-      box-shadow: 0 0 0 3px rgba(242, 166, 90, 0.2);
     }
 
-    /* 排序按钮 */
     .sort-btn {
       padding: 10px 16px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.78);
+      border-radius: 20px;
+      background: #ffffff;
       border: 1px solid var(--line);
       color: var(--text);
       font-size: 14px;
     }
     .sort-btn:hover {
-      background: #fff;
-      border-color: var(--accent);
-      color: #ff7b00;
-      transform: translateY(-1px);
+      background: #faf9f6;
+      border-color: var(--muted);
     }
     .sort-btn.active {
-      background: var(--accent-gradient);
-      color: #fff;
+      background: var(--text);
+      color: #ffffff;
       border-color: transparent;
       font-weight: bold;
-      box-shadow: 0 4px 12px rgba(242, 166, 90, 0.2);
-    }
-
-    #toggleSidebar {
-      background: rgba(80, 55, 28, 0.05);
-      border-color: transparent;
-      font-weight: bold;
-    }
-    #toggleSidebar:hover {
-      background: rgba(80, 55, 28, 0.12);
-      color: var(--text);
     }
 
     .content-head {
@@ -250,33 +246,33 @@
       gap: 16px;
     }
 
-    /* 漫画卡片基础架构 */
+    /* 漫画卡片：整张支持跳转 */
     .card {
+      text-decoration: none;
       overflow: hidden;
-      background: rgba(255,255,255,0.88);
+      background: #ffffff;
       border: 1px solid var(--line);
-      border-radius: 22px;
+      border-radius: var(--radius);
       box-shadow: var(--shadow);
       display: flex; 
-      align-items: flex-start; /* 确保封面和右侧内容整体绝对居顶对齐 */
-      transition: all 0.25s ease;
+      align-items: flex-start; 
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
     }
 
-    /* 删除了之前的全卡片摇晃，改回顺滑的整体上浮提升与动态发光 */
     .card:hover {
       transform: translateY(-4px);
       border-color: var(--accent);
-      box-shadow: 0 16px 35px rgba(242, 166, 90, 0.22);
+      box-shadow: 0 12px 30px rgba(40, 30, 20, 0.08);
     }
 
-    /* 漫画专属：固定 2:3 纵向海报比例 */
     .cover {
       width: 120px;
       aspect-ratio: 2 / 3;
       margin: 16px;
-      border: 1px solid rgba(242, 166, 90, 0.34);
-      border-radius: 14px;
-      background: linear-gradient(135deg, rgba(255, 214, 170, 0.20), rgba(255, 241, 227, 0.10));
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #faf9f6;
       overflow: hidden;
       position: relative;
       flex-shrink: 0;
@@ -288,7 +284,6 @@
       display: block;
     }
 
-    /* 右侧信息容器：内容绝对靠顶部排列 */
     .card-body {
       padding: 18px 20px 18px 4px;
       flex: 1;
@@ -301,13 +296,12 @@
 
     .title {
       margin: 0;
-      font-size: 20px;
+      font-size: 18px;
       line-height: 1.35;
       color: var(--text);
-      transition: color 0.2s ease;
     }
     .card:hover .title {
-      color: #ff7b00;
+      color: var(--accent);
     }
 
     .meta-row {
@@ -322,15 +316,11 @@
       display: inline-flex;
       align-items: center;
       padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(242,166,90,0.12);
-      color: #b86a20;
+      border-radius: 6px;
+      background: #faf9f6;
+      border: 1px solid var(--line);
+      color: var(--muted);
       font-size: 12px;
-      transition: all 0.2s ease;
-    }
-    .card:hover .tag {
-      background: rgba(242,166,90,0.22);
-      color: #ff6a00;
     }
 
     .rating {
@@ -338,19 +328,26 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      color: #b86a20;
+      color: var(--muted);
       font-weight: 700;
-      white-space: nowrap;
     }
     .stars {
-      letter-spacing: 1px;
-      color: #f2a65a;
+      color: var(--accent);
       font-size: 14px;
-      font-weight: 700;
     }
 
-    /* ---------------- 【核心新增：文字抖动与彩虹变色】 ---------------- */
-    /* 彩虹变色动画 */
+    /* 点评文字样式及外挂包 */
+    .desc {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.6;
+      text-align: left;
+      display: block;
+      color: var(--muted);
+      white-space: pre-wrap; /* 完美支持换行 */
+      font-weight: normal;
+    }
+
     @keyframes rainbow {
       0% { color: #ff7979; }
       25% { color: #badc58; }
@@ -359,7 +356,6 @@
       100% { color: #ff7979; }
     }
 
-    /* 高频轻微文字抖动动画 */
     @keyframes textShake {
       0% { transform: translate(0, 0); }
       20% { transform: translate(-0.6px, 0.4px); }
@@ -369,44 +365,49 @@
       100% { transform: translate(0, 0); }
     }
 
-    /* 作品点评（简介）文字样式：炫酷的彩虹色变换与高频微抖动无缝叠加 */
-    .desc {
-      margin: 0;
-      font-size: 14px;
-      line-height: 1.6;
-      text-align: left;
-      display: block; /* 转换为块级以完美承载变型效果 */
+    .desc.rainbow-shake {
       font-weight: bold;
       animation: rainbow 3s linear infinite, textShake 0.15s linear infinite;
     }
-    /* ------------------------------------------------------------- */
+    .desc.rainbow-only {
+      font-weight: bold;
+      animation: rainbow 3s linear infinite;
+    }
+    .desc.shake-only {
+      color: #ff4757;
+      animation: textShake 0.15s linear infinite;
+    }
 
     .footer-note { margin: 20px 0 8px; color: var(--muted); font-size: 13px; }
     .empty {
       padding: 36px;
       text-align: center;
       color: var(--muted);
-      background: rgba(255,255,255,0.72);
-      border: 1px dashed rgba(242, 166, 90, 0.30);
-      border-radius: 22px;
+      background: #ffffff;
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
     }
 
-    /* 响应式设计 */
-    @media (max-width: 1100px) {
-      .app { flex-direction: column; }
+    /* 移动端/竖屏抽屉式响应式布局 */
+    @media (max-width: 768px) {
       .sidebar { 
-        position: relative; height: auto; width: 100%; border-right: none; border-bottom: 1px solid var(--line); 
-        transition: height 0.3s ease, padding 0.3s ease;
+        position: fixed; 
+        top: 0; 
+        left: 0; 
+        bottom: 0; 
+        height: 100vh;
+        width: 280px; 
+        border-right: 1px solid var(--line);
+        box-shadow: 4px 0 30px rgba(0,0,0,0.1);
+        transform: translateX(0); 
       }
-      .sidebar-wrapper { width: 100%; }
+      
       .app.sidebar-collapsed .sidebar { 
-        width: 100%; height: 0; padding-top: 0; padding-bottom: 0; border-bottom-color: transparent; 
+        width: 280px; 
+        transform: translateX(-100%); 
       }
-    }
 
-    @media (max-width: 720px) {
-      .main { padding: 18px; }
-      .sidebar { padding: 18px 14px; }
+      .main { padding: 16px; }
       .card { flex-direction: column; align-items: stretch; }
       .cover { width: calc(100% - 32px); margin: 16px 16px 0 16px; }
       .card-body { padding: 16px; }
@@ -416,10 +417,12 @@
 <body>
   <div class="app">
     <aside class="sidebar">
+      <button id="sidebarCloseBtn" class="sidebar-close-btn" title="收起侧边栏">✕</button>
+      
       <div class="sidebar-wrapper">
         <div class="brand">
           <h1>漫画收藏阁</h1>
-          <p>专注、纯粹的漫画次元记录空间。完美支持 2:3 漫画纵向比例封面展现。</p>
+          <p>纯色高级版。已完美实现侧边栏双向收齐联动逻辑（Gemini同款）。</p>
         </div>
 
         <div class="section-title">漫画分类</div>
@@ -427,16 +430,15 @@
 
         <div class="sidebar-footer">
           静态漫画展示站。<br />
-          点评文字已注入魔性高频微晃动及彩虹色彩流转特效！
+          无论是主面板按钮还是侧边栏右上角的 ✕，均可一键操控菜单。
         </div>
       </div>
     </aside>
 
     <main class="main">
       <section class="panel control-panel">
-        
         <div class="custom-intro">
-          <p>✨ 欢迎来到我的私人漫画收纳所！这里珍藏着所有触动过灵魂的热血分镜与日常温存。可在 index.html 中随时自定义此段文字。 ✨</p>
+          <p>✨ 欢迎来到我的私人漫画收纳所！可在 index.html 中随时自定义此段文字。 ✨</p>
         </div>
 
         <div class="control-row">
@@ -461,19 +463,48 @@
       <section id="cardGrid" class="grid"></section>
       <div id="emptyState" class="empty" style="display:none;">没有找到符合过滤条件的漫画。</div>
 
-      <div class="footer-note">建议部署到 GitHub Pages 时保留为单页入口：<code>index.html</code>。封面图可直接放本地路径，例如 <code>images/xxx.jpg</code>。</div>
+      <div class="footer-note">建议部署到 GitHub Pages 时保留为单页入口：<code>index.html</code>。</div>
     </main>
   </div>
 
   <script>
-    // 聚焦纯漫画的数源
     const data = [
-      { title: "电锯人", sub: "热血", rating: 4, cover: "", desc: "节奏怪异且极猛，分镜具有强烈的电影质感与疯狂张力。" },
-      { title: "海贼王", sub: "冒险", rating: 5, cover: "", desc: "连载数十载的史诗巨作，拥有极其庞大的世界观和令人动容的伏笔。" },
-      { title: "灌篮高手", sub: "运动", rating: 5, cover: "", desc: "属于青春与汗水的绝对经典，全国大赛阶段的无声分镜堪称漫画史巅峰。" },
-      { title: "间谍过家家", sub: "喜剧", rating: 4, cover: "", desc: "顶尖特工、杀手组织与读心术超能力女儿构成的爆笑伪装家庭日常。" },
-      { title: "古见同学有交流障碍症", sub: "日常", rating: 4, cover: "", desc: "极致细腻的校园社交温情剧，画风极具特色，日常观感轻松舒适。" },
-      { title: "进击的巨人", sub: "奇幻", rating: 5, cover: "", desc: "故事结构精妙严密，在绝望与自由的冲突中铺展开宏大的漫画画卷。" }
+      { 
+        title: "电锯人", 
+        sub: "热血", 
+        rating: 4, 
+        cover: "", 
+        desc: "节奏怪异且极猛！\n分镜具有强烈的电影质感与疯狂张力。", 
+        effect: "rainbow-shake",
+        url: "https://manga.bilibili.com/" 
+      },
+      { 
+        title: "海贼王", 
+        sub: "冒险", 
+        rating: 5, 
+        cover: "", 
+        desc: "连载数十载的史诗巨作。\n拥有极其庞大的世界观和令人动容的伏笔。", 
+        effect: "rainbow-only",
+        url: "#" 
+      },
+      { 
+        title: "灌篮高手", 
+        sub: "运动", 
+        rating: 5, 
+        cover: "", 
+        desc: "属于青春与汗水的绝对经典！\n全国大赛阶段的无声分镜堪称漫画史巅峰。", 
+        effect: "", 
+        url: "#"
+      },
+      { 
+        title: "间谍过家家", 
+        sub: "喜剧", 
+        rating: 4, 
+        cover: "", 
+        desc: "顶尖特工、杀手组织与读心术女儿。\n构成的爆笑伪装家庭日常。", 
+        effect: "shake-only",
+        url: "#"
+      }
     ];
 
     const state = {
@@ -492,6 +523,7 @@
     const resultCount = document.getElementById("resultCount");
     const searchInput = document.getElementById("searchInput");
     const toggleSidebarBtn = document.getElementById("toggleSidebar");
+    const sidebarCloseBtn = document.getElementById("sidebarCloseBtn");
     const appContainer = document.querySelector(".app");
 
     function starText(rating) {
@@ -529,10 +561,11 @@
     function renderCards() {
       const list = applyFilters();
       updateHeader(list.length);
+      
       cardGrid.innerHTML = list.map(item => `
-        <article class="card">
+        <a href="${item.url || '#'}" target="_blank" class="card">
           <div class="cover">
-            ${item.cover ? `<img src="${item.cover}" alt="${item.title} 封面">` : `<div class="cover-placeholder">2:3 漫画</div>`}
+            ${item.cover ? `<img src="${item.cover}" alt="${item.title} 封面">` : `<div class="cover-placeholder" style="text-align:center;line-height:180px;font-size:13px;color:#b0a8a0;">2:3 封面</div>`}
           </div>
           <div class="card-body">
             <h4 class="title">${item.title}</h4>
@@ -540,20 +573,23 @@
               <span class="tag">${item.sub}</span>
               <span class="rating"><span class="stars">${starText(item.rating)}</span></span>
             </div>
-            <p class="desc">${item.desc}</p>
+            <p class="desc ${item.effect || ''}">${item.desc}</p>
           </div>
-        </article>
+        </a>
       `).join("");
 
       emptyState.style.display = list.length ? "none" : "block";
     }
 
-    // 侧边栏折叠/展开动画控制
-    toggleSidebarBtn.addEventListener("click", () => {
+    // 💡 核心联动逻辑：一个核心切换函数，绑定两处按钮
+    function toggleSidebar() {
       appContainer.classList.toggle("sidebar-collapsed");
       const isCollapsed = appContainer.classList.contains("sidebar-collapsed");
       toggleSidebarBtn.innerHTML = isCollapsed ? "📂 展开侧边栏" : "📂 收起侧边栏";
-    });
+    }
+
+    toggleSidebarBtn.addEventListener("click", toggleSidebar);
+    sidebarCloseBtn.addEventListener("click", toggleSidebar);
 
     subCategoryNav.addEventListener("click", (e) => {
       const btn = e.target.closest("button[data-sub]");
@@ -561,6 +597,11 @@
       state.sub = btn.dataset.sub;
       renderSubNav();
       renderCards();
+      // 手机端选完分类后自动收起菜单
+      if (window.innerWidth <= 768) {
+        appContainer.classList.add("sidebar-collapsed");
+        toggleSidebarBtn.innerHTML = "📂 展开侧边栏";
+      }
     });
 
     document.querySelectorAll(".sort-btn[data-sort]").forEach(btn => {
@@ -576,6 +617,12 @@
       state.search = e.target.value;
       renderCards();
     });
+
+    // 手机竖屏状态打开时默认隐藏侧边栏
+    if (window.innerWidth <= 768) {
+      appContainer.classList.add("sidebar-collapsed");
+      toggleSidebarBtn.innerHTML = "📂 展开侧边栏";
+    }
 
     // 初始化
     renderSubNav();
