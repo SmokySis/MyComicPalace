@@ -365,17 +365,47 @@
       100% { transform: translate(0, 0); }
     }
 
-    .desc.rainbow-shake {
+/* ----------- 升级版的通用局部特效外挂包 ----------- */
+
+    .rainbow-shake {
+      display: inline-block;   /* 💡 核心：允许局部文字进行抖动和变形 */
       font-weight: bold;
       animation: rainbow 3s linear infinite, textShake 0.15s linear infinite;
     }
-    .desc.rainbow-only {
+
+    .rainbow-only {
+      display: inline-block;
       font-weight: bold;
       animation: rainbow 3s linear infinite;
     }
-    .desc.shake-only {
-      color: #ff4757;
+
+    .shake-only {
+      display: inline-block;
+      color: #ff4757;          /* 局部纯红抖动 */
       animation: textShake 0.15s linear infinite;
+    }
+
+    /* 1. 基础纯黑加粗：不放大，完美融入排版 */
+    .bold-black {
+      font-weight: 900;       /* 极致加粗 */
+      color: #000000;         /* 纯黑 */
+    }
+
+    /* 2. 🔥 修正版：重磅压迫感（字号放大且正常排版） */
+    .bold-black-pop {
+      font-weight: 900;       /* 极致加粗 */
+      color: #000000;         /* 纯黑 */
+      font-size: 2.00em;      /* 💡 核心：使用 em 单位。1.15em 意味着比周围的字放大 1.15 倍 */
+      line-height: 1;         /* 防止放大后撑大整行导致行距变丑 */
+    }
+
+    /* 🔥 终极压迫感：纯黑 + 极致加粗 + 疯狂抖动 */
+    .bold-black-shake {
+      display: inline-block;  /* 💡 核心：必须有这行，文字才能做位移抖动 */
+      font-weight: 900;       /* 极致加粗 */
+      font-size: 2.00em; 
+      color: #000000;         /* 纯黑 */
+      animation: textShake 0.15s linear infinite; /* 💡 直接复用之前写好的抖动动画 */
     }
 
     .footer-note { margin: 20px 0 8px; color: var(--muted); font-size: 13px; }
@@ -474,8 +504,8 @@
         sub: "热血", 
         rating: 4, 
         cover: "", 
-        desc: "节奏怪异且极猛！\n分镜具有强烈的电影质感与疯狂张力。", 
-        effect: "rainbow-shake",
+        desc: "节奏怪异且<span class='shake-only'>极猛</span>！\n这绝对是一部<span class='bold-black-shake'>不容错过</span>的邪典神作。", 
+        effect: "",
         url: "https://manga.bilibili.com/" 
       },
       { 
@@ -484,7 +514,7 @@
         rating: 5, 
         cover: "", 
         desc: "连载数十载的史诗巨作。\n拥有极其庞大的世界观和令人动容的伏笔。", 
-        effect: "rainbow-only",
+        effect: "",
         url: "#" 
       },
       { 
@@ -502,7 +532,7 @@
         rating: 4, 
         cover: "", 
         desc: "顶尖特工、杀手组织与读心术女儿。\n构成的爆笑伪装家庭日常。", 
-        effect: "shake-only",
+        effect: "",
         url: "#"
       }
     ];
