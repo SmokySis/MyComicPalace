@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>我的专属漫画阁-瀑布流手账版</title>
+  <style>
+    :root {
+      --bg: #f5f2eb;          /* 带有温度的复古日系纸张色 */
+      --panel: #ffffff;       
+      --text: #241e1a;
+      --muted: #786c64;
+      --line: rgba(120, 108, 100, 0.12); 
+      --accent: #d96a43;      
+      --shadow: 0 8px 24px rgba(40, 30, 20, 0.04);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Inter, "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      /* 手帐点阵纹理背景 */
+      background-image: radial-gradient(rgba(40, 30, 20, 0.04) 1.5px, transparent 1.5px);
+      background-size: 20px 20px;
+    }
+
+    .app {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* 侧边栏基础架构 */
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      width: 280px;
+      flex-shrink: 0;
+      padding: 28px 20px;
+      border-right: 1px solid var(--line);
+      background: #ffffff;
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                  padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+      z-index: 1000;
+    }
+
+    .sidebar-wrapper {
+      width: 240px;
+    }
+
+    .sidebar-close-btn {
+      position: absolute;
+      top: 24px;
+      right: 20px;
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      z-index: 1010;
+    }
+    .sidebar-close-btn:hover {
+      background: #faf9f6;
+      color: var(--text);
+      border-color: var(--muted);
+    }
+
+    /* PC端收起状态 */
+    .app.sidebar-collapsed .sidebar {
+      width: 0;
+      padding-left: 0;
+      padding-right: 0;
+      border-right-color: transparent;
+    }
+
+    .brand {
+      padding: 10px 30px 20px 8px; 
+      margin-bottom: 12px;
+    }
+
+    .brand h1 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      letter-spacing: 0.4px;
+    }
+
+    .brand p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .section-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      margin: 18px 10px 10px;
+    }
+
+    .nav-group {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .sub-btn, .sort-btn {
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .sub-btn {
+      width: 100%;
+      text-align: left;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: #faf9f6;
+      color: var(--muted);
+      font-size: 14px;
+      border: 1px solid var(--line);
+    }
+
+    .sub-btn:hover {
+      background: #f0ede6;
+      color: var(--text);
+    }
+
+    .sub-btn.active {
+      background: var(--accent);
+      color: #ffffff !important;
+      border-color: transparent;
+      font-weight: bold;
+    }
+
+    .sidebar-footer {
+      margin-top: 24px;
+      padding: 16px 14px;
+      border-radius: 12px;
+      background: #faf9f6;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .main { 
+      flex: 1;
+      min-width: 0;
+      padding: 28px; 
+    }
+
+    .control-panel {
+      padding: 20px;
+      display: grid;
+      gap: 16px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 30px;
+    }
+
+    .custom-intro {
+      background: #fff3f0;
+      border-left: 4px solid var(--accent);
+      padding: 12px 16px;
+      border-radius: 8px;
+    }
+    .custom-intro p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #8c432b;
+      font-weight: bold;
+    }
+
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .search {
+      flex: 1;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 14px;
+      outline: none;
+      color: var(--text);
+      transition: all 0.2s ease;
+    }
+
+    .search:focus { 
+      border-color: var(--accent); 
+    }
+
+    .sort-btn {
+      padding: 10px 16px;
+      border-radius: 20px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      color: var(--text);
+      font-size: 14px;
+    }
+    .sort-btn:hover {
+      background: #faf9f6;
+      border-color: var(--muted);
+    }
+    .sort-btn.active {
+      background: var(--text);
+      color: #ffffff;
+      border-color: transparent;
+      font-weight: bold;
+    }
+
+    .content-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 12px;
+      margin: 26px 0 20px;
+    }
+    .content-head h3 { margin: 0; font-size: 22px; }
+    .content-head span { color: var(--muted); font-size: 14px; }
+
+    /* 💡【核心改动】抛弃 Grid，启用真正的 CSS 瀑布流列排版 */
+    .grid {
+      display: block;         /* 切换为块级容器 */
+      column-count: 1;        /* 默认单列 */
+      column-gap: 28px;       /* 列之间的左右间距 */
+      padding-top: 15px;
+    }
+    
+    @media (min-width: 992px) {
+      .grid {
+        column-count: 2;      /* 宽屏下自动平铺为精美的双列瀑布流 */
+      }
+    }
+
+    /* 💡 漫画卡片：完美适应内容长度 */
+    .card {
+      position: relative;
+      text-decoration: none;
+      overflow: visible;      
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: flex; 
+      align-items: flex-start; 
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+      padding-right: 16px;
+      
+      margin-top: 20px;       
+      margin-bottom: 40px;    /* 💡 用下边距代替之前的网格行距，给倾斜和破格留出空间 */
+      break-inside: avoid;    /* 💡 极其关键：防止卡片在分页换列时被拦腰截断 */
+    }
+
+    /* 制造随心堆叠的倾斜手帐感 */
+    .card:nth-child(odd) { transform: rotate(-1deg); }
+    .card:nth-child(even) { transform: rotate(0.8deg); }
+
+    /* 手帐卡片顶部的伪复古“纸胶带”装饰 */
+    .card::before {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: 55%;
+      width: 55px;
+      height: 16px;
+      background: rgba(217, 106, 67, 0.22); 
+      transform: rotate(4deg);
+      backdrop-filter: blur(1px);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .card:nth-child(odd)::before {
+      background: rgba(242, 166, 90, 0.25);
+      transform: rotate(-3deg);
+      left: 45%;
+    }
+
+    /* 杂志感超大半透明背景数字编号 */
+    .card-index {
+      position: absolute;
+      right: 16px;
+      bottom: -4px;
+      font-size: 76px;
+      font-weight: 900;
+      color: rgba(40, 30, 20, 0.03); 
+      font-family: "Impact", Arial, sans-serif;
+      user-select: none;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* 鼠标悬停：卡片回正、浮起 */
+    .card:hover {
+      transform: translateY(-8px) scale(1.02) rotate(0deg) !important;
+      border-color: var(--accent);
+      box-shadow: 0 20px 38px rgba(40, 30, 20, 0.08);
+      z-index: 10;
+    }
+
+    /* 破格封面 */
+    .cover {
+      width: 130px;            
+      aspect-ratio: 2 / 3;
+      margin: -22px 16px 16px -12px; 
+      border: 3px solid #ffffff;     
+      border-radius: 12px;
+      background: #faf9f6;
+      box-shadow: 0 10px 25px rgba(40, 30, 20, 0.12); 
+      overflow: hidden;
+      position: relative;
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+      z-index: 3;
+    }
+    
+    .card:hover .cover { transform: scale(1.04) rotate(-1.5deg); }
+    .cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .card-body {
+      padding: 16px 4px 16px 0;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start; 
+      align-items: flex-start;
+      gap: 8px;
+      z-index: 2;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 19px;
+      font-weight: 800;
+      line-height: 1.35;
+      color: var(--text);
+    }
+    .card:hover .title { color: var(--accent); }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      width: 100%;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 9px;
+      border-radius: 6px;
+      background: #faf9f6;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .rating {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .stars { color: var(--accent); font-size: 14px; }
+
+    /* 💡 点评文字样式：高度自由由内容决定 */
+    .desc {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.6;
+      text-align: left;
+      display: block;
+      color: var(--muted);
+      white-space: pre-wrap; 
+      font-weight: normal;
+    }
+
+    @keyframes textShake {
+      0% { transform: translate(0, 0); }
+      20% { transform: translate(-0.6px, 0.4px); }
+      40% { transform: translate(-0.4px, -0.6px); }
+      60% { transform: translate(0.6px, 0.4px); }
+      80% { transform: translate(-0.4px, 0.6px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    .bold-black-shake {
+      display: inline-block;  
+      font-weight: 900;       
+      font-size: 1.25em; 
+      color: #000000;         
+      animation: textShake 0.15s linear infinite; 
+    }
+
+    .footer-note { margin: 20px 0 8px; color: var(--muted); font-size: 13px; }
+    .empty {
+      padding: 36px;
+      text-align: center;
+      color: var(--muted);
+      background: #ffffff;
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+    }
+
+    /* 移动端适配 */
+    @media (max-width: 768px) {
+      .sidebar { 
+        position: fixed; top: 0; left: 0; bottom: 0; height: 100vh; width: 280px; 
+        border-right: 1px solid var(--line);
+        box-shadow: 4px 0 30px rgba(0,0,0,0.1);
+        transform: translateX(0); 
+      }
+      .app.sidebar-collapsed .sidebar { width: 280px; transform: translateX(-100%); }
+      .main { padding: 16px; }
+
+      .grid { column-count: 1; gap: 20px; }
+      .card { margin-top: 10px; margin-bottom: 25px; }
+      .cover { width: 110px; margin: -16px 12px 12px -6px; border-width: 2px; }
+      .title { font-size: 16px; }
+      .desc { font-size: 13px; }
+      .card-index { font-size: 56px; bottom: -4px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <button id="sidebarCloseBtn" class="sidebar-close-btn" title="收起侧边栏">✕</button>
+      
+      <div class="sidebar-wrapper">
+        <div class="brand">
+          <h1>漫画收藏阁</h1>
+          <p>动态瀑布流手账风。卡片格子随心呼吸，高矮胖瘦各凭所愿。</p>
+        </div>
+
+        <div class="section-title">漫画分类</div>
+        <div id="subCategoryNav" class="nav-group"></div>
+
+        <div class="sidebar-footer">
+          静态漫画展示站。<br />
+          无论是主面板按钮还是侧边栏右上角的 ✕，均可一键操控菜单。
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <section class="panel control-panel">
+        <div class="custom-intro">
+          <p>✨ 欢迎来到我的私人漫画收纳所！文字越长，卡片越长，打破千篇一律。 ✨</p>
+        </div>
+
+        <div class="control-row">
+          <button id="toggleSidebar" class="sort-btn">📂 收起侧边栏</button>
+          <input id="searchInput" class="search" type="text" placeholder="搜索漫画名称、标签或简介..." />
+        </div>
+        <div class="control-row">
+          <button class="sort-btn active" data-sort="rating-desc">评分从高到低</button>
+          <button class="sort-btn" data-sort="rating-asc">评分从低到高</button>
+          <button class="sort-btn" data-sort="title-asc">名称 A-Z</button>
+        </div>
+      </section>
+
+      <div class="content-head">
+        <div>
+          <h3 id="listTitle">全部漫画</h3>
+          <span id="listMeta">按评分排序</span>
+        </div>
+        <div><span id="resultCount">0</span> 项结果</div>
+      </div>
+
+      <section id="cardGrid" class="grid"></section>
+      <div id="emptyState" class="empty" style="display:none;">没有找到符合过滤条件的漫画。</div>
+
+      <div class="footer-note">建议部署到 GitHub Pages 时保留为单页入口：<code>index.html</code>。</div>
+    </main>
+  </div>
+
+  <script>
+    // 💡 特意拉开文本字数差距，完美展示高度随文字自适应的“瀑布流”效果
+    const data = [
+      { 
+        title: "海贼王", 
+        sub: "冒险", 
+        rating: 5, 
+        cover: "", 
+        desc: "连载数十载的伟大气史诗巨作！\n尾田荣一郎构筑了让人叹为观止的极\n分镜张力的把控已经\n到了化境。尤其是全国大赛\n阶段，最后那几分钟几\n乎完度庞大世界观，空岛篇的浪漫、司法岛的决绝、顶上战争的宏大，再到一个个精妙绝伦的伏笔跨越数百年在如今收拢。这不仅仅是一部漫画，更是长达二十多年的漫长陪伴。每一次看依然会为了当年的热血和梦想而感动落泪。属于男人的极致浪漫莫过于此！", 
+        effect: "",
+        url: "#" 
+      },
+      { 
+        title: "电锯人", 
+        sub: "热血", 
+        rating: 4, 
+        cover: "", 
+        desc: "节奏怪异且分镜神级！\n藤本树的脑洞无法预测，这绝对是一部<span class='bold-black-shake'>不容错过</span>的邪典级当代神作。炎拳之后的精神延续。", 
+        effect: "",
+        url: "https://manga.bilibili.com/" 
+      },
+      { 
+        title: "灌篮高手", 
+        sub: "运动", 
+        rating: 5, 
+        cover: "", 
+        desc: "属于青春与汗水的绝对金字塔巅峰经典！\n井上雄彦老师对人体肌肉动态、\n分镜张力的把控已经\n到了化境。尤其是全国大赛\n阶段，最后那几分钟几\n乎完全没有台词的纯纯画\n面交替和无声分镜，其窒息感、紧张感\n和心跳感堪称世界漫画史上的最高级别艺术珍品，无论翻看多少遍，依然让人热血澎湃。‘我的辉煌时刻，就是现在了！’", 
+        effect: "", 
+        url: "#"
+      },
+      { 
+        title: "间谍过家家", 
+        sub: "喜剧", 
+        rating: 4, 
+        cover: "", 
+        desc: "顶尖特工、杀手组织与读心术女儿构成的爆笑伪装家庭日常，阿尼亚可爱就完事了！", 
+        effect: "",
+        url: "#"
+      },
+      { 
+        title: "过家家", 
+        sub: "喜剧", 
+        rating: 4, 
+        cover: "", 
+        desc: "顶尖特工、杀手组织与读心术女儿构成的爆笑伪装家庭日常，阿尼亚可爱就完事了！", 
+        effect: "",
+        url: "#"
+      }
+    ];
+
+    const state = {
+      sub: "全部",
+      sort: "rating-desc",
+      search: ""
+    };
+
+    const subs = ["全部", ...new Set(data.map(i => i.sub))];
+
+    const subCategoryNav = document.getElementById("subCategoryNav");
+    const cardGrid = document.getElementById("cardGrid");
+    const emptyState = document.getElementById("emptyState");
+    const listTitle = document.getElementById("listTitle");
+    const listMeta = document.getElementById("listMeta");
+    const resultCount = document.getElementById("resultCount");
+    const searchInput = document.getElementById("searchInput");
+    const toggleSidebarBtn = document.getElementById("toggleSidebar");
+    const sidebarCloseBtn = document.getElementById("sidebarCloseBtn");
+    const appContainer = document.querySelector(".app");
+
+    function starText(rating) {
+      return "★".repeat(rating) + "☆".repeat(5 - rating);
+    }
+
+    function renderSubNav() {
+      subCategoryNav.innerHTML = subs.map(sub => `
+        <button class="sub-btn ${state.sub === sub ? 'active' : ''}" data-sub="${sub}">${sub}</button>
+      `).join("");
+    }
+
+    function applyFilters() {
+      let list = [...data];
+      if (state.sub !== "全部") list = list.filter(i => i.sub === state.sub);
+
+      const q = state.search.trim().toLowerCase();
+      if (q) {
+        list = list.filter(i => [i.title, i.sub, i.desc].join(" ").toLowerCase().includes(q));
+      }
+
+      if (state.sort === "rating-desc") list.sort((a, b) => b.rating - a.rating);
+      if (state.sort === "rating-asc") list.sort((a, b) => a.rating - b.rating);
+      if (state.sort === "title-asc") list.sort((a, b) => a.title.localeCompare(b.title, 'zh-Hans-CN'));
+
+      return list;
+    }
+
+    function updateHeader(count) {
+      resultCount.textContent = count;
+      listTitle.textContent = state.sub === "全部" ? "全部漫画" : `${state.sub} 漫画`;
+      listMeta.textContent = state.search ? `关键词：${state.search}` : `按 ${document.querySelector('.sort-btn.active')?.textContent || '评分从高到低'} 排序`;
+    }
+
+    function renderCards() {
+      const list = applyFilters();
+      updateHeader(list.length);
+      
+      cardGrid.innerHTML = list.map((item, idx) => `
+        <a href="${item.url || '#'}" target="_blank" class="card">
+          <div class="card-index">${String(idx + 1).padStart(2, '0')}</div>
+          <div class="cover">
+            ${item.cover ? `<img src="${item.cover}" alt="${item.title} 封面">` : `<div class="cover-placeholder" style="display:flex;align-items:center;justify-content:center;height:100%;font-size:12px;color:#b0a8a0;font-weight:bold;background:#eeeae1;">无封面</div>`}
+          </div>
+          <div class="card-body">
+            <h4 class="title">${item.title}</h4>
+            <div class="meta-row">
+              <span class="tag">${item.sub}</span>
+              <span class="rating"><span class="stars">${starText(item.rating)}</span></span>
+            </div>
+            <p class="desc">${item.desc}</p>
+          </div>
+        </a>
+      `).join("");
+
+      emptyState.style.display = list.length ? "none" : "block";
+    }
+
+    function toggleSidebar() {
+      appContainer.classList.toggle("sidebar-collapsed");
+      const isCollapsed = appContainer.classList.contains("sidebar-collapsed");
+      toggleSidebarBtn.innerHTML = isCollapsed ? "📂 展开侧边栏" : "📂 收起侧边栏";
+    }
+
+    toggleSidebarBtn.addEventListener("click", toggleSidebar);
+    sidebarCloseBtn.addEventListener("click", toggleSidebar);
+
+    subCategoryNav.addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-sub]");
+      if (!btn) return;
+      state.sub = btn.dataset.sub;
+      renderSubNav();
+      renderCards();
+      if (window.innerWidth <= 768) {
+        appContainer.classList.add("sidebar-collapsed");
+        toggleSidebarBtn.innerHTML = "📂 展开侧边栏";
+      }
+    });
+
+    document.querySelectorAll(".sort-btn[data-sort]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".sort-btn[data-sort]").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        state.sort = btn.dataset.sort;
+        renderCards();
+      });
+    });
+
+    searchInput.addEventListener("input", (e) => {
+      state.search = e.target.value;
+      renderCards();
+    });
+
+    if (window.innerWidth <= 768) {
+      appContainer.classList.add("sidebar-collapsed");
+      toggleSidebarBtn.innerHTML = "📂 展开侧边栏";
+    }
+
+    renderSubNav();
+    renderCards();
+  </script>
+</body>
+</html>

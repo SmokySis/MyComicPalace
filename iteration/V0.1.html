@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ACG 收藏站</title>
+  <style>
+    :root {
+      --bg: #fff8f1;
+      --panel: rgba(255, 255, 255, 0.84);
+      --text: #2e241b;
+      --muted: #8b7663;
+      --line: rgba(80, 55, 28, 0.08);
+      --accent: #f2a65a;
+      --shadow: 0 12px 30px rgba(113, 76, 35, 0.10);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Inter, "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(255, 214, 170, 0.38), transparent 26%),
+        radial-gradient(circle at top right, rgba(242, 166, 90, 0.14), transparent 22%),
+        linear-gradient(180deg, #fffaf4 0%, #fff2e6 100%);
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 28px 20px;
+      border-right: 1px solid var(--line);
+      background: rgba(255, 249, 241, 0.78);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      padding: 10px 8px 20px;
+      margin-bottom: 12px;
+    }
+
+    .brand h1 {
+      margin: 0 0 8px;
+      font-size: 26px;
+      letter-spacing: 0.4px;
+    }
+
+    .brand p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .section-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      margin: 18px 10px 10px;
+    }
+
+    .nav-group {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .nav-btn, .sub-btn, .sort-btn, .chip {
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: 0.2s ease;
+      user-select: none;
+    }
+
+    .nav-btn {
+      width: 100%;
+      text-align: left;
+      padding: 14px 14px;
+      border-radius: 16px;
+      background: transparent;
+      color: var(--text);
+      font-size: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-btn:hover, .sub-btn:hover, .sort-btn:hover, .chip:hover { transform: translateY(-1px); }
+
+    .nav-btn.active {
+      background: linear-gradient(135deg, rgba(242, 166, 90, 0.18), rgba(255, 215, 173, 0.28));
+      border-color: rgba(242, 166, 90, 0.18);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.5);
+    }
+
+    .sub-btn {
+      width: 100%;
+      text-align: left;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255, 252, 248, 0.82);
+      color: var(--muted);
+      font-size: 14px;
+      border-color: var(--line);
+    }
+
+    .sub-btn.active {
+      background: #fff;
+      color: var(--text);
+      border-color: rgba(242, 166, 90, 0.22);
+      box-shadow: var(--shadow);
+    }
+
+    .sidebar-footer {
+      margin-top: 24px;
+      padding: 16px 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .main { padding: 28px; }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .hero-card, .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .hero-card { padding: 24px; }
+
+    .hero-card h2 {
+      margin: 0 0 10px;
+      font-size: 30px;
+    }
+
+    .hero-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .stat {
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.76);
+      border: 1px solid var(--line);
+    }
+
+    .stat .num {
+      display: block;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .stat .label {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .control-panel {
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .search {
+      flex: 1 1 220px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.88);
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 14px;
+      outline: none;
+      color: var(--text);
+    }
+
+    .search:focus { border-color: rgba(242, 166, 90, 0.45); }
+
+    .sort-btn, .chip {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.78);
+      border-color: var(--line);
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .sort-btn.active, .chip.active {
+      background: linear-gradient(135deg, rgba(242, 166, 90, 0.16), rgba(255, 215, 173, 0.24));
+      border-color: rgba(242, 166, 90, 0.28);
+    }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+
+    .content-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 12px;
+      margin: 26px 0 14px;
+    }
+
+    .content-head h3 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .content-head span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .card {
+      overflow: hidden;
+      background: rgba(255,255,255,0.88);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      transition: 0.22s ease;
+      min-height: 170px;
+    }
+
+    .card:hover { transform: translateY(-3px); }
+
+    .cover {
+      margin: 16px 0 16px 16px;
+      border: 1px solid rgba(242, 166, 90, 0.34);
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(255, 214, 170, 0.20), rgba(255, 241, 227, 0.10));
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.36);
+      min-height: 138px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .cover-placeholder {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: rgba(106, 58, 19, 0.55);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background:
+        radial-gradient(circle at 22% 22%, rgba(255,255,255,0.82), transparent 20%),
+        radial-gradient(circle at 78% 28%, rgba(255,255,255,0.42), transparent 24%),
+        linear-gradient(135deg, rgba(242,166,90,0.18), rgba(255,215,173,0.08));
+    }
+
+    .card-body {
+      padding: 18px 18px 16px;
+      display: grid;
+      gap: 14px;
+      align-content: center;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.35;
+      color: var(--text);
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(242,166,90,0.12);
+      color: #b86a20;
+      font-size: 12px;
+    }
+
+    .rating {
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #b86a20;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .stars {
+      letter-spacing: 1px;
+      color: #f2a65a;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .desc {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+      min-height: 48px;
+    }
+
+    .footer-note {
+      margin: 20px 0 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .empty {
+      padding: 36px;
+      text-align: center;
+      color: var(--muted);
+      background: rgba(255,255,255,0.72);
+      border: 1px dashed rgba(242, 166, 90, 0.30);
+      border-radius: 22px;
+    }
+
+    @media (max-width: 1100px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { position: relative; height: auto; }
+      .hero { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 720px) {
+      .main { padding: 18px; }
+      .sidebar { padding: 18px 14px; }
+      .stats { grid-template-columns: 1fr; }
+      .card { grid-template-columns: 1fr; }
+      .cover { min-height: 220px; margin: 16px 16px 0 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <h1>ACG 收藏站</h1>
+        <p>记录你看过的电视剧、漫画、游戏、动漫等作品。支持大类切换、小类筛选、五星评分排序。</p>
+      </div>
+
+      <div class="section-title">大类</div>
+      <div id="categoryNav" class="nav-group"></div>
+
+      <div class="section-title">小类</div>
+      <div id="subCategoryNav" class="nav-group"></div>
+
+      <div class="sidebar-footer">
+        这是一个适合 GitHub Pages 的静态站点模板。<br />
+        你只需要修改脚本里的作品数据，就能快速换成自己的收藏列表。
+      </div>
+    </aside>
+
+    <main class="main">
+      <section class="hero">
+        <div class="hero-card">
+          <h2 id="heroTitle">欢迎来到你的 ACG 记录站</h2>
+          <p id="heroDesc">这是一个清爽的静态展示页。你可以用它记录作品、按类别浏览，并根据自己的整星五星评价进行排序。</p>
+          <div class="stats">
+            <div class="stat"><span id="statCount" class="num">0</span><span class="label">作品总数</span></div>
+            <div class="stat"><span id="statCategory" class="num">-</span><span class="label">当前大类</span></div>
+            <div class="stat"><span id="statSub" class="num">-</span><span class="label">当前小类</span></div>
+          </div>
+        </div>
+
+        <div class="panel control-panel">
+          <div class="control-row">
+            <input id="searchInput" class="search" type="text" placeholder="搜索作品名称或简介..." />
+          </div>
+          <div class="control-row">
+            <button class="sort-btn active" data-sort="rating-desc">评分从高到低</button>
+            <button class="sort-btn" data-sort="rating-asc">评分从低到高</button>
+            <button class="sort-btn" data-sort="title-asc">名称 A-Z</button>
+          </div>
+          <div class="chips" id="quickChips"></div>
+        </div>
+      </section>
+
+      <div class="content-head">
+        <div>
+          <h3 id="listTitle">全部作品</h3>
+          <span id="listMeta">按评分排序</span>
+        </div>
+        <div><span id="resultCount">0</span> 项结果</div>
+      </div>
+
+      <section id="cardGrid" class="grid"></section>
+      <div id="emptyState" class="empty" style="display:none;">没有找到符合条件的作品。</div>
+
+      <div class="footer-note">建议部署到 GitHub Pages 时保留为单页入口：<code>index.html</code>。封面图可直接放本地路径，例如 <code>images/xxx.jpg</code>。</div>
+    </main>
+  </div>
+
+  <script>
+    const data = [
+      { title: "Clannad", category: "动画", sub: "治愈", rating: 5, cover: "", desc: "情感很强，后劲十足，适合放在最前面的位置。" },
+      { title: "进击的巨人", category: "动画", sub: "热血", rating: 5, cover: "", desc: "节奏强，世界观宏大，观感非常有冲击力。" },
+      { title: "钢之炼金术师 FA", category: "动画", sub: "冒险", rating: 5, cover: "", desc: "结构完整，角色和主题都非常成熟。" },
+      { title: "孤独摇滚！", category: "动画", sub: "日常", rating: 4, cover: "", desc: "轻松有趣，角色魅力非常突出。" },
+      { title: "星际牛仔", category: "动画", sub: "科幻", rating: 5, cover: "", desc: "氛围感很强，复古又自由。" },
+      { title: "咒术回战", category: "动画", sub: "热血", rating: 4, cover: "", desc: "战斗表现很强，节奏感也很足。" },
+      { title: "电锯人", category: "漫画", sub: "热血", rating: 4, cover: "", desc: "节奏很猛，气质非常独特。" },
+      { title: "海贼王", category: "漫画", sub: "冒险", rating: 5, cover: "", desc: "长期追更型作品，世界观非常庞大。" },
+      { title: "只狼", category: "游戏", sub: "动作", rating: 5, cover: "", desc: "手感出色，Boss 设计很有代表性。" },
+      { title: "NieR:Automata", category: "游戏", sub: "动作", rating: 5, cover: "", desc: "音乐、叙事和气质都非常鲜明。" },
+      { title: "原神", category: "游戏", sub: "开放世界", rating: 4, cover: "", desc: "适合记录长线游玩体验和版本变化。" },
+      { title: "三体", category: "电视剧", sub: "科幻", rating: 4, cover: "", desc: "更偏概念和世界观呈现。" }
+    ];
+
+    const state = {
+      category: "全部",
+      sub: "全部",
+      sort: "rating-desc",
+      search: ""
+    };
+
+    const categories = ["全部", ...new Set(data.map(i => i.category))];
+    const subMap = () => {
+      const current = state.category === "全部" ? data : data.filter(i => i.category === state.category);
+      return ["全部", ...new Set(current.map(i => i.sub))];
+    };
+
+    const categoryNav = document.getElementById("categoryNav");
+    const subCategoryNav = document.getElementById("subCategoryNav");
+    const cardGrid = document.getElementById("cardGrid");
+    const emptyState = document.getElementById("emptyState");
+    const statCount = document.getElementById("statCount");
+    const statCategory = document.getElementById("statCategory");
+    const statSub = document.getElementById("statSub");
+    const listTitle = document.getElementById("listTitle");
+    const listMeta = document.getElementById("listMeta");
+    const resultCount = document.getElementById("resultCount");
+    const heroTitle = document.getElementById("heroTitle");
+    const heroDesc = document.getElementById("heroDesc");
+    const searchInput = document.getElementById("searchInput");
+    const quickChips = document.getElementById("quickChips");
+
+    function starText(rating) {
+      return "★".repeat(rating) + "☆".repeat(5 - rating);
+    }
+
+    function renderCategoryNav() {
+      categoryNav.innerHTML = categories.map(cat => `
+        <button class="nav-btn ${state.category === cat ? 'active' : ''}" data-category="${cat}">
+          <span>${cat}</span><span>›</span>
+        </button>
+      `).join("");
+    }
+
+    function renderSubNav() {
+      const subs = subMap();
+      subCategoryNav.innerHTML = subs.map(sub => `
+        <button class="sub-btn ${state.sub === sub ? 'active' : ''}" data-sub="${sub}">${sub}</button>
+      `).join("");
+    }
+
+    function renderChips() {
+      const chips = ["全部", ...new Set(data.map(i => i.category))];
+      quickChips.innerHTML = chips.map(chip => `
+        <button class="chip ${state.category === chip ? 'active' : ''}" data-chip="${chip}">${chip}</button>
+      `).join("");
+    }
+
+    function applyFilters() {
+      let list = [...data];
+      if (state.category !== "全部") list = list.filter(i => i.category === state.category);
+      if (state.sub !== "全部") list = list.filter(i => i.sub === state.sub);
+
+      const q = state.search.trim().toLowerCase();
+      if (q) {
+        list = list.filter(i => [i.title, i.category, i.sub, i.desc].join(" ").toLowerCase().includes(q));
+      }
+
+      if (state.sort === "rating-desc") list.sort((a, b) => b.rating - a.rating);
+      if (state.sort === "rating-asc") list.sort((a, b) => a.rating - b.rating);
+      if (state.sort === "title-asc") list.sort((a, b) => a.title.localeCompare(b.title, 'zh-Hans-CN'));
+
+      return list;
+    }
+
+    function updateHeader(count) {
+      statCount.textContent = data.length;
+      statCategory.textContent = state.category;
+      statSub.textContent = state.sub;
+      resultCount.textContent = count;
+      listTitle.textContent = `${state.category} / ${state.sub}`;
+      listMeta.textContent = state.search ? `关键词：${state.search}` : `按 ${document.querySelector('.sort-btn.active')?.textContent || '评分从高到低'} 排序`;
+      heroTitle.textContent = state.category === "全部" ? "欢迎来到你的 ACG 记录站" : `正在浏览：${state.category}`;
+      heroDesc.textContent = state.sub === "全部"
+        ? "用左侧大类和小类快速筛选你的作品。右侧支持搜索和排序，方便你按自己的整星五星评价整理收藏。"
+        : `当前聚焦在「${state.sub}」分类下，可以继续按评分或名称浏览。`;
+    }
+
+    function renderCards() {
+      const list = applyFilters();
+      updateHeader(list.length);
+      cardGrid.innerHTML = list.map(item => `
+        <article class="card">
+          <div class="cover">
+            ${item.cover ? `<img src="${item.cover}" alt="${item.title} 封面">` : `<div class="cover-placeholder">cover</div>`}
+          </div>
+          <div class="card-body">
+            <h4 class="title">${item.title}</h4>
+            <div class="meta-row">
+              <span class="tag">${item.category}</span>
+              <span class="tag">${item.sub}</span>
+              <span class="rating"><span class="stars">${starText(item.rating)}</span></span>
+            </div>
+            <p class="desc">${item.desc}</p>
+          </div>
+        </article>
+      `).join("");
+
+      emptyState.style.display = list.length ? "none" : "block";
+    }
+
+    function syncSubCategory() {
+      const subs = subMap();
+      if (!subs.includes(state.sub)) state.sub = "全部";
+    }
+
+    categoryNav.addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-category]");
+      if (!btn) return;
+      state.category = btn.dataset.category;
+      syncSubCategory();
+      renderCategoryNav();
+      renderSubNav();
+      renderChips();
+      renderCards();
+    });
+
+    subCategoryNav.addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-sub]");
+      if (!btn) return;
+      state.sub = btn.dataset.sub;
+      renderSubNav();
+      renderCards();
+    });
+
+    quickChips.addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-chip]");
+      if (!btn) return;
+      state.category = btn.dataset.chip;
+      state.sub = "全部";
+      syncSubCategory();
+      renderCategoryNav();
+      renderSubNav();
+      renderChips();
+      renderCards();
+    });
+
+    document.querySelectorAll(".sort-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".sort-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        state.sort = btn.dataset.sort;
+        renderCards();
+      });
+    });
+
+    searchInput.addEventListener("input", (e) => {
+      state.search = e.target.value;
+      renderCards();
+    });
+
+    renderCategoryNav();
+    renderSubNav();
+    renderChips();
+    renderCards();
+  </script>
+</body>
+</html>
