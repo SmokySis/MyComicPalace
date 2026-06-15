@@ -4,15 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>漫画印象阁</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --bg: #f5f2eb;          /* 带有温度的复古日系纸张色 */
+      --bg: #f5f2eb;          
       --panel: #ffffff;       
-      --text: #241e1a;
-      --muted: #786c64;
-      --line: rgba(120, 108, 100, 0.12); 
+      --text: #1a1613;        
+      --muted: #4a403a;       
+      --line: rgba(90, 80, 75, 0.18); 
       --accent: #d96a43;      
-      --shadow: 0 8px 24px rgba(40, 30, 20, 0.04);
+      --shadow: 0 8px 24px rgba(40, 30, 20, 0.05);
       --radius: 18px;
     }
 
@@ -20,11 +25,11 @@
     html, body { height: 100%; }
     body {
       margin: 0;
-      font-family: Inter, "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
+      /* 🌟 【修改】将全局字体设置为思源黑体，并做好各平台的本地思源黑体回退配置 */
+      font-family: "Noto Sans SC", "Source Han Sans SC", "Source Han Sans CN", sans-serif;
       color: var(--text);
       background: var(--bg);
-      /* 手帐点阵纹理背景 */
-      background-image: radial-gradient(rgba(40, 30, 20, 0.04) 1.5px, transparent 1.5px);
+      background-image: radial-gradient(rgba(40, 30, 20, 0.05) 1.5px, transparent 1.5px);
       background-size: 20px 20px;
     }
 
@@ -33,7 +38,6 @@
       min-height: 100vh;
     }
 
-    /* 侧边栏基础架构 */
     .sidebar {
       position: sticky;
       top: 0;
@@ -78,7 +82,6 @@
       border-color: var(--muted);
     }
 
-    /* PC端收起状态 */
     .app.sidebar-collapsed .sidebar {
       width: 0;
       padding-left: 0;
@@ -95,20 +98,24 @@
       margin: 0 0 8px;
       font-size: 24px;
       letter-spacing: 0.4px;
+      color: var(--text);
+      font-weight: 800; /* 加重标题 */
     }
 
     .brand p {
       margin: 0;
       color: var(--muted);
-      font-size: 13px;
+      font-size: 14px; 
       line-height: 1.7;
+      font-weight: 500;
     }
 
     .section-title {
       font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 0.14em;
-      color: var(--muted);
+      color: var(--text); 
+      font-weight: 700;
       margin: 18px 10px 10px;
     }
 
@@ -134,6 +141,7 @@
       color: var(--muted);
       font-size: 14px;
       border: 1px solid var(--line);
+      font-weight: 500;
     }
 
     .sub-btn:hover {
@@ -145,18 +153,7 @@
       background: var(--accent);
       color: #ffffff !important;
       border-color: transparent;
-      font-weight: bold;
-    }
-
-    .sidebar-footer {
-      margin-top: 24px;
-      padding: 16px 14px;
-      border-radius: 12px;
-      background: #faf9f6;
-      border: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.6;
+      font-weight: 700;
     }
 
     .main { 
@@ -177,17 +174,17 @@
     }
 
     .custom-intro {
-      background: #fff3f0;
+      background: #fff2ee; 
       border-left: 4px solid var(--accent);
-      padding: 12px 16px;
+      padding: 14px 18px;
       border-radius: 8px;
     }
     .custom-intro p {
       margin: 0;
-      font-size: 14px;
+      font-size: 15px; 
       line-height: 1.6;
-      color: #8c432b;
-      font-weight: bold;
+      color: #7a321c; 
+      font-weight: 800; 
     }
 
     .control-row {
@@ -207,6 +204,7 @@
       outline: none;
       color: var(--text);
       transition: all 0.2s ease;
+      font-family: inherit; /* 确保输入框也使用思源黑体 */
     }
 
     .search:focus { 
@@ -220,6 +218,8 @@
       border: 1px solid var(--line);
       color: var(--text);
       font-size: 14px;
+      font-weight: 500;
+      font-family: inherit;
     }
     .sort-btn:hover {
       background: #faf9f6;
@@ -229,7 +229,7 @@
       background: var(--text);
       color: #ffffff;
       border-color: transparent;
-      font-weight: bold;
+      font-weight: 700;
     }
 
     .content-head {
@@ -239,123 +239,109 @@
       gap: 12px;
       margin: 26px 0 20px;
     }
-    .content-head h3 { margin: 0; font-size: 22px; }
-    .content-head span { color: var(--muted); font-size: 14px; }
+    .content-head h3 { margin: 0; font-size: 22px; color: var(--text); font-weight: 800; }
+    .content-head span { color: var(--muted); font-size: 14px; font-weight: 500; }
 
-    /* 【核心改动】抛弃 Grid，启用真正的 CSS 瀑布流列排版 */
     .grid {
-      display: block;         /* 切换为块级容器 */
-      column-count: 1;        /* 默认单列 */
-      column-gap: 28px;       /* 列之间的左右间距 */
+      display: block;         
+      column-count: 1;        
+      column-gap: 28px;       
       padding-top: 15px;
     }
     
     @media (min-width: 992px) {
       .grid {
-        column-count: 2;      /* 宽屏下自动平铺为精美的双列瀑布流 */
+        column-count: 2;      
       }
     }
 
-    /* 💡 漫画卡片：完美适应内容长度 */
     .card {
       position: relative;
       text-decoration: none;
-      overflow: visible;      /* 极其关键：允许右上角贴纸破格溢出 */
+      overflow: visible;      
       background: #ffffff;
       border: 1px solid var(--line);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       display: flex; 
       align-items: flex-start; 
-      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      
+      transform: none;
+      backface-visibility: hidden;
+      -webkit-font-smoothing: antialiased;
+      
+      transition: transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                  box-shadow 0.25s ease, 
+                  border-color 0.25s ease;
       cursor: pointer;
       padding-right: 16px;
       
       margin-top: 20px;       
-      margin-bottom: 40px;    /* 用下边距代替之前的网格行距，给倾斜和破格留出空间 */
-      break-inside: avoid;    /* 极其关键：防止卡片在分页换列时被拦腰截断 */
+      margin-bottom: 40px;    
+      break-inside: avoid;    
     }
 
-    /* 制造随心堆叠的倾斜手帐感 */
-    .card:nth-child(odd) { transform: rotate(-1deg); }
-    .card:nth-child(even) { transform: rotate(0.8deg); }
-
-    /* 手帐卡片顶部的伪复古“纸胶带”装饰 */
     .card::before {
       content: "";
       position: absolute;
       top: -10px;
-      left: 55%;
+      left: 50%;
       width: 55px;
       height: 16px;
-      background: rgba(217, 106, 67, 0.22); 
-      transform: rotate(4deg);
+      background: rgba(217, 106, 67, 0.25); 
+      transform: translateX(-50%) rotate(2deg); 
       backdrop-filter: blur(1px);
       pointer-events: none;
       z-index: 2;
     }
     .card:nth-child(odd)::before {
-      background: rgba(242, 166, 90, 0.25);
-      transform: rotate(-3deg);
-      left: 45%;
+      background: rgba(242, 166, 90, 0.3);
+      transform: translateX(-50%) rotate(-2deg);
     }
 
-    /* 杂志感超大半透明背景数字编号 */
     .card-index {
       position: absolute;
       right: 16px;
       bottom: -4px;
       font-size: 76px;
       font-weight: 900;
-      color: rgba(40, 30, 20, 0.03); 
+      color: rgba(40, 30, 20, 0.04); 
       font-family: "Impact", Arial, sans-serif;
       user-select: none;
       pointer-events: none;
       z-index: 1;
     }
 
-    /* 💥【新增】漫画感爆炸点评图片组件样式 */
     .explosion-badge {
       position: absolute;
-      top: -35px;        /* 放大后，往上冲出的距离也要适当调大 */
-      right: -25px;       /* 往右冲出的距离 */
-      width: 100px;       /* 👈 从 90px 改成 130px */
-      height: 100px;      /* 👈 从 90px 改成 130px */
+      top: -35px;        
+      right: -25px;       
+      width: 100px;       
+      height: 100px;      
       z-index: 15;
-      filter: drop-shadow(3px 3px 0px var(--text));
+      filter: drop-shadow(3px 3px 0px #000000);
       transform: rotate(14deg);
       transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    /* 核心魔法：利用 clip-path 把正方形图片精准剪裁成 20 尖角的漫画爆炸星形状 */
     .explosion-badge img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
-      background: #ffd64f00; /* 当图片未加载出时的漫画明黄底色 */
-      /* clip-path: polygon(
-        50% 4%, 58% 14%, 70% 9%, 72% 21%, 85% 19%, 83% 32%, 96% 34%, 90% 48%, 
-        96% 61%, 84% 65%, 86% 79%, 73% 79%, 70% 91%, 58% 86%, 50% 96%, 42% 86%, 
-        30% 91%, 27% 79%, 14% 79%, 16% 65%, 4% 61%, 10% 48%, 4% 34%, 17% 32%, 
-        15% 19%, 28% 21%, 30% 9%, 42% 14%
-      ); */
     }
 
-    /* 鼠标悬停：卡片回正、浮起 */
     .card:hover {
-      transform: translateY(-8px) scale(1.02) rotate(0deg) !important;
+      transform: translateY(-6px) scale(1.015);
       border-color: var(--accent);
-      box-shadow: 0 20px 38px rgba(40, 30, 20, 0.08);
+      box-shadow: 0 16px 32px rgba(40, 30, 20, 0.08);
       z-index: 10;
     }
 
-    /* 💥 悬停时，爆炸图片贴纸反向扭转放大，极具动感 */
     .card:hover .explosion-badge {
-      transform: rotate(-10deg) scale(1.2);
+      transform: rotate(-10deg) scale(1.15);
     }
 
-    /* 破格封面 */
     .cover {
       width: 130px;            
       aspect-ratio: 2 / 3;
@@ -388,7 +374,7 @@
     .title {
       margin: 0;
       font-size: 19px;
-      font-weight: 800;
+      font-weight: 800; /* 配合思源黑体极粗体使用，显得非常有张力 */
       line-height: 1.35;
       color: var(--text);
     }
@@ -397,7 +383,7 @@
     .meta-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 6px; 
       align-items: center;
       width: 100%;
     }
@@ -407,10 +393,11 @@
       align-items: center;
       padding: 3px 9px;
       border-radius: 6px;
-      background: #faf9f6;
+      background: #f1ede4;       
       border: 1px solid var(--line);
-      color: var(--muted);
+      color: #6b5f55;            
       font-size: 12px;
+      font-weight: 600; /* 标签使用半粗体，清晰不扎眼 */         
     }
 
     .rating {
@@ -419,19 +406,19 @@
       gap: 4px;
       color: var(--muted);
       font-weight: 700;
+      margin-left: 4px;
     }
     .stars { color: var(--accent); font-size: 14px; }
 
-    /* 点评文字样式：高度自由由内容决定 */
     .desc {
       margin: 0;
       font-size: 14px;
       line-height: 1.6;
       text-align: left;
       display: block;
-      color: var(--muted);
+      color: var(--muted);       
       white-space: pre-wrap; 
-      font-weight: normal;
+      font-weight: 500; /* 思源黑体的 500 字重非常适合正文阅读，清晰度极高 */         
     }
 
     @keyframes textShake {
@@ -445,13 +432,13 @@
 
     .bold-black-shake {
       display: inline-block;  
-      font-weight: 900;       
+      font-weight: 900; /* 疯狂抖动文字使用最高级 900 黑色体 */      
       font-size: 1.25em; 
       color: #000000;         
       animation: textShake 0.15s linear infinite; 
     }
 
-    .footer-note { margin: 20px 0 8px; color: var(--muted); font-size: 13px; }
+    .footer-note { margin: 20px 0 8px; color: var(--muted); font-size: 13px; font-weight: 500; }
     .empty {
       padding: 36px;
       text-align: center;
@@ -459,9 +446,9 @@
       background: #ffffff;
       border: 1px dashed var(--line);
       border-radius: var(--radius);
+      font-weight: 700;
     }
 
-    /* 移动端适配 */
     @media (max-width: 768px) {
       .sidebar { 
         position: fixed; top: 0; left: 0; bottom: 0; height: 100vh; width: 280px; 
@@ -478,7 +465,6 @@
       .title { font-size: 16px; }
       .desc { font-size: 13px; }
       .card-index { font-size: 56px; bottom: -4px; }
-      /* 💥 移动端稍微缩小一点爆炸点评的大小，防止遮挡文字 */
       .explosion-badge { width: 70px; height: 70px; top: -16px; right: -10px; }
     }
   </style>
@@ -494,7 +480,7 @@
           <p>仅作个人纪录用，不含客观意见。</p>
         </div>
 
-        <div class="section-title">漫画分类</div>
+        <div class="section-title">分类标签</div>
         <div id="subCategoryNav" class="nav-group"></div>
       </div>
     </aside>
@@ -532,12 +518,10 @@
   </div>
 
   <script>
-    // 💡【数据扩展】允许加入可选的 commentImg 字段来单独注入图片点评贴纸
-    // 提示：此处用了随机图做演示，正式使用时请替换为你真实的图片路径（如 "./images/review1.png"）
     const data = [
       { 
         title: "海贼王", 
-        sub: "冒险", 
+        subs: ["冒险", "热血", "连载中"], 
         rating: 5, 
         cover: "./images/test.png", 
         desc: "连载数十载的伟大气史诗巨作！\n尾田荣一郎构筑了让人叹为观止的极\n分镜张力的把控已经\n到了化境。尤其是全国大赛\n阶段，最后那几分钟几\n乎完度庞大世界观，空岛篇的浪漫、司法岛的决绝、顶上战争的宏大，再到一个个精妙绝伦的伏笔跨越数百年在如今收拢。这不仅仅是一部漫画，更是长达二十多年的漫长陪伴。每一次看依然会为了当年的热血和梦想而感动落泪。属于男人的极致浪漫莫过于此！", 
@@ -546,17 +530,17 @@
       },
       { 
         title: "电锯人", 
-        sub: "热血", 
+        subs: ["热血", "奇幻", "邪典"], 
         rating: 4, 
         cover: "", 
         desc: "节奏怪异且分镜神级！\n藤本树的脑洞无法预测，这绝对是一部<span class='bold-black-shake'>不容错过</span>的邪典级当代神作。炎拳之后的精神延续。", 
         effect: "",
-        commentImg: "./images/crazy.png", // 💥 为电锯人增加爆炸点评图
+        commentImg: "./images/crazy.png", 
         url: "https://manga.bilibili.com/" 
       },
       { 
         title: "灌篮高手", 
-        sub: "运动", 
+        subs: ["运动", "热血", "完结"], 
         rating: 5, 
         cover: "", 
         desc: "属于青春与汗水的绝对金字塔巅峰经典！\n井上雄彦老师对人体肌肉动态、\n分镜张力的把控已经\n到了化境。尤其是全国大赛\n阶段，最后那几分钟几\n乎完全没有台词的纯纯画\n面交替和无声分镜，其窒息感、紧张感\n和心跳感堪称世界漫画史上的最高级别艺术珍品，无论翻看多少遍，依然让人热血澎湃。‘我的辉煌时刻，就是现在了！’", 
@@ -565,7 +549,7 @@
       },
       { 
         title: "间谍过家家", 
-        sub: "喜剧", 
+        subs: ["喜剧", "日常"], 
         rating: 4, 
         cover: "", 
         desc: "顶尖特工、杀手组织与读心术女儿构成的爆笑伪装家庭日常，阿尼亚可爱就完事了！", 
@@ -574,12 +558,12 @@
       },
       { 
         title: "过家家", 
-        sub: "搞笑", 
+        subs: ["搞笑", "日常"], 
         rating: 4, 
         cover: "", 
         desc: "顶尖特工、杀手组织与读心术女儿构成的爆笑伪装家庭日常，阿尼亚可爱就完事了！", 
         effect: "",
-        commentImg: "./images/crazy.png", // 💥 为过家家增加爆炸点评图
+        commentImg: "./images/crazy.png", 
         url: "#"
       }
     ];
@@ -590,7 +574,7 @@
       search: ""
     };
 
-    const subs = ["全部", ...new Set(data.map(i => i.sub))];
+    const allUniqueSubs = ["全部", ...new Set(data.flatMap(item => item.subs || []))];
 
     const subCategoryNav = document.getElementById("subCategoryNav");
     const cardGrid = document.getElementById("cardGrid");
@@ -608,18 +592,24 @@
     }
 
     function renderSubNav() {
-      subCategoryNav.innerHTML = subs.map(sub => `
+      subCategoryNav.innerHTML = allUniqueSubs.map(sub => `
         <button class="sub-btn ${state.sub === sub ? 'active' : ''}" data-sub="${sub}">${sub}</button>
       `).join("");
     }
 
     function applyFilters() {
       let list = [...data];
-      if (state.sub !== "全部") list = list.filter(i => i.sub === state.sub);
+      
+      if (state.sub !== "全部") {
+        list = list.filter(item => item.subs && item.subs.includes(state.sub));
+      }
 
       const q = state.search.trim().toLowerCase();
       if (q) {
-        list = list.filter(i => [i.title, i.sub, i.desc].join(" ").toLowerCase().includes(q));
+        list = list.filter(item => {
+          const tagString = item.subs ? item.subs.join(" ") : "";
+          return [item.title, tagString, item.desc].join(" ").toLowerCase().includes(q);
+        });
       }
 
       if (state.sort === "rating-desc") list.sort((a, b) => b.rating - a.rating);
@@ -631,7 +621,7 @@
 
     function updateHeader(count) {
       resultCount.textContent = count;
-      listTitle.textContent = state.sub === "全部" ? "全部漫画" : `${state.sub} 漫画`;
+      listTitle.textContent = state.sub === "全部" ? "全部漫画" : `${state.sub} 标签下`;
       listMeta.textContent = state.search ? `关键词：${state.search}` : `按 ${document.querySelector('.sort-btn.active')?.textContent || '评分从高到低'} 排序`;
     }
 
@@ -639,7 +629,6 @@
       const list = applyFilters();
       updateHeader(list.length);
       
-      // 💡【渲染逻辑改动】如果数据里有 commentImg 字段，就输出一段爆炸图片的 HTML
       cardGrid.innerHTML = list.map((item, idx) => `
         <a href="${item.url || '#'}" target="_blank" class="card">
           ${item.commentImg ? `
@@ -654,7 +643,7 @@
           <div class="card-body">
             <h4 class="title">${item.title}</h4>
             <div class="meta-row">
-              <span class="tag">${item.sub}</span>
+              ${item.subs ? item.subs.map(t => `<span class="tag">${t}</span>`).join("") : ""}
               <span class="rating"><span class="stars">${starText(item.rating)}</span></span>
             </div>
             <p class="desc">${item.desc}</p>
