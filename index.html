@@ -47,15 +47,22 @@
       padding: 28px 20px;
       border-right: 1px solid var(--line);
       background: #ffffff;
+      /* --- 新增以下两行 --- */
+      overflow-y: auto;          /* 开启垂直滚动 */
+      scrollbar-width: none;     /* 隐藏滚动条（Firefox） */
+      /* ------------------- */
       transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
                   padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
                   transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      overflow: hidden;
       z-index: 1000;
     }
 
     .sidebar-wrapper {
       width: 240px;
+    }
+
+    .sidebar::-webkit-scrollbar {
+      display: none;
     }
 
     .sidebar-close-btn {
@@ -536,7 +543,8 @@
           <input id="searchInput" class="search" type="text" placeholder="这个是搜索栏，我也不知道它为什么要存在、可以搜什么……" />
         </div>
         <div class="control-row">
-          <button class="sort-btn active" data-sort="rating-desc">评分从高到低</button>
+          <button class="sort-btn active" data-sort="original">默认排序</button>
+          <button class="sort-btn" data-sort="rating-desc">评分从高到低</button>
           <button class="sort-btn" data-sort="rating-asc">评分从低到高</button>
           <button class="sort-btn" data-sort="title-asc">名称 A-Z</button>
         </div>
@@ -559,21 +567,1042 @@
 
   <script>
     const data = [
-      { 
-        title: "不觉得村庄建造游戏的NPC也是活生生的人吗", 
-        subs: ["神人作品","电波系"], 
-        rating: 5, 
-        cover: "./images/电锯人.png", 
-        desc: "第一部足够自由\n第二部有朝就值回票价了，电次什么的无所谓了\n其实也是很喜欢的作品，但追更完第二部好像也没了念头", 
-        effect: "",
-        commentImg: "", //"./images/crazy.png", 
-        url: "" 
-      },
-    ];
+  {
+    title: "电锯人",
+    subs: ["神人作品"],
+    rating: 5,
+    cover: "./images/电锯人.png",
+    desc: "第一部足够自由\n第二部有朝就值回票价了，电次什么的无所谓了\n其实也是很喜欢的作品，但追更完第二部好像也没了念头",
+    effect: "",
+    commentImg: "", //"./images/crazy.png", 
+    url: "#"
+  },
+  {
+    title: "智惠梨的爱情高达8米",
+    subs: ["幻想"],
+    rating: 3,
+    cover: "./images/智惠梨的爱情高达8米.png",
+    desc: "校园恋爱但是进击的巨人，还挺甜\n男主别坠机了",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "香格里拉粪作猎人",
+    subs: ["厕纸"],
+    rating: 2,
+    cover: "./images/香格里拉粪作猎人.png",
+    desc: "没对上电波，也没看多少",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "见面五秒开始战斗",
+    subs: ["智斗"],
+    rating: 2,
+    cover: "./images/见面五秒开始战斗.png",
+    desc: "典型的越写越没活的智斗",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "前辈有够烦",
+    subs: ["幻想"],
+    rating: 5,
+    cover: "./images/关于前辈很烦人的事.png",
+    desc: "木头大战，不赖，其实更喜欢副CP，没有说主CP不好的意思",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "有鬼拍不到",
+    subs: ["搞笑"],
+    rating: 5,
+    cover: "./images/有鬼拍不到.png",
+    desc: "超级引鬼体质VS超绝克鬼体制，你们知道吗\n很萌很神人的一群",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "二人巴士",
+    subs: ["幻想"],
+    rating: 99,
+    cover: "./images/二人巴士.png",
+    desc: "对少年少女那种情窦初开的感觉描写的特别特别好",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "镖人",
+    subs: ["国漫"],
+    rating: 5,
+    cover: "./images/镖人.png",
+    desc: "国漫共一石，镖人占八斗",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "邻座同学用那种眼神看着我",
+    subs: ["幻想"],
+    rating: 3,
+    cover: "./images/邻座同学.png",
+    desc: "你们做，我不打扰，我走了",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "迷宫干",
+    subs: ["神人作品"],
+    rating: 69,
+    cover: "./images/迷宫干.png",
+    desc: "什么罐子我说，纯粹的混沌但又足够真挚（某种意义）\n拒绝R18羞耻好吧，神作无需多言",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "全知读者视角",
+    subs: ["Webtoon"],
+    rating: 3,
+    cover: "./images/全知读者视角.png",
+    desc: "中规中矩的韩式网文，群像还不错，架构很有野心\n漫画才做了三分之一小说，后面去把小说看完了",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "独狼女孩的单相思",
+    subs: ["幻想"],
+    rating: 4,
+    cover: "./images/独狼女孩的单相思.png",
+    desc: "全员淡人挺有趣的，男主人设很少见诶（可能是我看得少）",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "地下城里的青梅竹马",
+    subs: ["幻想"],
+    rating: 99,
+    cover: "./images/地下城里的青梅竹马.png",
+    desc: "当大伙都在写烂大街的校园青春时\n你这家伙居然写日式西幻地下城吗\n居然还是没有任何后宫党争的纯粹的男女主青梅竹马恋爱喜剧！？\n不得不说作者算是很好地发挥了这个题材，有一些很新奇很好味的点子\n还有读者嘴替的最强助攻应援团乐子源源不断\n而且还有牛头人（字面意思）",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "加奈子的幸福杀手生活",
+    subs: ["搞笑"],
+    rating: 5,
+    cover: "./images/加奈子的幸福杀手生活.png",
+    desc: "不兑！\n说好的搞笑呢！\n女主你就是该干这行的\n但是你不应该干这行啊啊啊啊啊啊啊啊啊\n看了真人剧改再来补的，真人剧改得非常好我超级喜欢\n加奈子，告诉我，你真的幸福吗",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "为了与你漫步宇宙",
+    subs: ["校园"],
+    rating: 3,
+    cover: "./images/与你漫步宇宙.png",
+    desc: "还挺有意思的，但没对上电波，应该是cb向吧？",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "血族",
+    subs: ["国漫"],
+    rating: 4,
+    cover: "./images/血族.png",
+    desc: "国漫黄金期作品\n剧情挺酷的\n我说全彩限制了国漫的发挥有没有人懂。\n可惜各种原因腰斩了\n不过作者在公众号复更了\n希望有生之年能完结",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "普普通通轻音部",
+    subs: ["校园"],
+    rating: 10,
+    cover: "./images/普普通通轻音部.png",
+    desc: "邦摇启蒙作\n看这本必须要准备两个设备：\n一个看漫画一个准备根据内容切歌\n汉化组很用心的做了曲目标注，网易云也有相关歌单\n到了演出环节就慢慢看，让歌曲播放和漫画歌词对上\n世出不二的阅读体验\n有几首真是神插入级别的",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "萤火虫之嫁",
+    subs: ["幻想"],
+    rating: 3,
+    cover: "./images/萤火虫之嫁.png",
+    desc: "误入女频",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "20世纪少年",
+    subs: ["悬疑"],
+    rating: 4,
+    cover: "./images/20世纪少年.png",
+    desc: "大概是我第一本青年漫？\n故事很棒，但后期有点圆不上的感觉，看的云里雾里的\n首尾呼应太酷了",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "回忆埃玛侬",
+    subs: ["科幻"],
+    rating: 4,
+    cover: "./images/回忆埃玛侬.png",
+    desc: "很有韵味的短篇",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "夏日重现",
+    subs: ["智斗"],
+    rating: 4,
+    cover: "./images/夏日重现.png",
+    desc: "轮回系里面还算不赖的，但结尾不是很喜欢",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "战队大失格",
+    subs: ["神人作品"],
+    rating: 4,
+    cover: "./images/战队大失格.png",
+    desc: "难以想象这是漫画家能画出来的分镜……\n起初以为是战队版黑袍纠察队，感觉还是不太一样\n剧情有点自由，想法是好的",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "恋语轻唱",
+    subs: ["幻想"],
+    rating: 5,
+    cover: "./images/恋语轻唱.png",
+    desc: "竹岛老师无敌了\n但是能不能别惦记你那配平了……",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "我心中危险的东西",
+    subs: ["幻想"],
+    rating: 98,
+    cover: "./images/我心危.png",
+    desc: "在一众校园恋爱里面确实是别出心裁\n标题就出现在了开头几话，但本身作品对于恋爱中“性”的描写相对大胆而且微妙",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "章鱼噼的原罪",
+    subs: ["神人作品"],
+    rating: 4,
+    cover: "./images/章鱼噼的原罪.png",
+    desc: "杀老师过来救场好不好……",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "简明易懂的SCP",
+    subs: ["科幻"],
+    rating: 4,
+    cover: "./images/SCP.png",
+    desc: "简明易懂的名字\n请继续更新，这是我了解SCP的唯一渠道",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "暗杀教室",
+    subs: ["校园"],
+    rating: 5,
+    cover: "./images/暗杀教室.png",
+    desc: "米娜桑……\n都是很好的人\n非常棒的邪道校园",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "幸运星",
+    subs: ["日常"],
+    rating: 5,
+    cover: "./images/幸运星.png",
+    desc: "超多阿宅暴论放到今天来看还是不过时www\n泉此方电波共鸣",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "银魂",
+    subs: ["搞笑"],
+    rating: 3,
+    cover: "./images/银魂.png",
+    desc: "对不上电波，只看了一点",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "风都侦探",
+    subs: ["悬疑"],
+    rating: 3,
+    cover: "./images/风都侦探.png",
+    desc: "我只是在怀念我刚入坑特摄那段时间吧……",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "棋魂",
+    subs: ["王道"],
+    rating: 3,
+    cover: "./images/棋魂.png",
+    desc: "高开低走吧，某个情节之后就有点乏力了\n小畑健的画技没得说",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "不觉得村庄建造游戏的NPC也是活生生的人吗",
+    subs: ["奇幻"],
+    rating: 5,
+    cover: "./images/村庄建造NPC.png",
+    desc: "对上电波了，还挺喜欢救赎剧情\n意犹未尽看了小说，设定挺酷的可惜没展开，但包饺子了也差不多可以HE了",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "硬汉⇔萝莉",
+    subs: ["搞笑"],
+    rating: 5,
+    cover: "./images/杀手幼女.png",
+    desc: "起初以为是杀手版你的名字，但意外地有趣啊\n关于东亚母女的题材发挥的很不错",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "少女杀手宅急便",
+    subs: ["搞笑"],
+    rating: 5,
+    cover: "./images/少女杀手宅急便.png",
+    desc: "女主的“天然呆”真是到了一定的境界了\n特别萌\n剧情走的是杀手题材常有的救赎/感人类\n女主就是天生该干这行的\n被腰斩了……不过故事也差不多可以结束了？",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "异世界舅舅",
+    subs: ["搞笑"],
+    rating: 2233,
+    cover: "./images/异世界舅舅.png",
+    desc: "懂的都懂",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "听我的电波吧",
+    subs: ["神人作品"],
+    rating: 122317,
+    cover: "./images/听我的电波吧.png",
+    desc: "好喜欢。\n完全对上电波了。\n画风人设剧情。\n都好喜欢。",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "神田御藏町职人物语",
+    subs: ["日常"],
+    rating: 3,
+    cover: "./images/职人物语.png",
+    desc: "太写实了，太匠心了",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "室外机厅短篇集",
+    subs: ["科幻"],
+    rating: 3,
+    cover: "./images/室外机厅短篇集.png",
+    desc: "发小送的生日礼物，有几篇挺对电波的",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "晚安布布",
+    subs: ["青年漫"],
+    rating: 5,
+    cover: "./images/晚安布布.png",
+    desc: "我已无话可说……",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "路边的藤井",
+    subs: ["日常"],
+    rating: 5,
+    cover: "./images/路边的藤井.png",
+    desc: "普通的人呐。\n气质很独特的作品\n以小见大地探讨了一些社会议题和人性话题",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "谁看见了孔雀在跳舞",
+    subs: ["悬疑"],
+    rating: 3,
+    cover: "./images/谁看见了孔雀在跳舞.png",
+    desc: "没看完，电波微存",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "诈欺游戏",
+    subs: ["智斗"],
+    rating: 5,
+    cover: "./images/欺诈游戏.png",
+    desc: "画风纯粹享受，审美积累\n不过作者真的不会画差异化的惊讶表情诶……\n最后一个游戏烂了但不算烂尾\n全篇下来还是有几个神级心理战的\n好想磕男女主但作者没那个意思\n做一辈子好朋友也行",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "弥留之国的爱丽丝",
+    subs: ["智斗"],
+    rating: 4,
+    cover: "./images/弥留之国的爱丽丝.png",
+    desc: "十日终焉绝对抄了这个啊喂\n智斗部分还行\n结尾升华挺好",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "未来日记",
+    subs: ["智斗"],
+    rating: 3,
+    cover: "./images/未来日记.png",
+    desc: "老资历病娇吓哭了\n真的是神人日记啊",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "诚如神之所说",
+    subs: ["智斗"],
+    rating: 2,
+    cover: "./images/诚如神之所说.png",
+    desc: "也就第一部还行吧",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "达尔文游戏",
+    subs: ["科幻"],
+    rating: 3,
+    cover: "./images/达尔文游戏.png",
+    desc: "作画团队纯粹萝莉控。\n还有我不是来看死亡游戏的吗\n怎么变成龙傲天爽文了",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "朋友游戏",
+    subs: ["智斗"],
+    rating: 4,
+    cover: "./images/朋友游戏.png",
+    desc: "封面帅哥你谁？\n构思感觉是抄了欺诈游戏\n不过也写出了自己的东西\n也是神人一群",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "废渊战鬼",
+    subs: ["王道"],
+    rating: 5,
+    cover: "./images/废渊战鬼.png",
+    desc: "审美积累\n画风特别特别劲，女神之作啊",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "碧蓝之海",
+    subs: ["搞笑"],
+    rating: 2233,
+    cover: "./images/碧蓝之海.png",
+    desc: "懂的都懂，神作不多说",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "这种沟通",
+    subs: ["神人作品"],
+    rating: 5,
+    cover: "./images/这种沟通.png",
+    desc: "我操牛逼。\n男主有这种思维做什么都会成功的\n非常特别非常震撼的剧情\n让我大脑发生巨变",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "间谍过家家",
+    subs: ["搞笑"],
+    rating: 4,
+    cover: "./images/间谍过家家.png",
+    desc: "很大众了，挺有趣的",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "花薰凛然",
+    subs: ["幻想"],
+    rating: 2,
+    cover: "./images/花薰凛然.png",
+    desc: "工业糖精",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "勇者再次启程",
+    subs: ["奇幻"],
+    rating: 3,
+    cover: "./images/勇者再次启程.png",
+    desc: "总感觉差一点味，也可能是因为没对上电波吧",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "战队红转生异世界",
+    subs: ["王道"],
+    rating: 10,
+    cover: "./images/战队红转生异世界.png",
+    desc: "献给特摄厨的一封情书\n最伟大的特摄作品",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "光死去的夏天",
+    subs: ["悬疑"],
+    rating: 4,
+    cover: "./images/光死夏.png",
+    desc: "慕名而来，虽然不是BL受众但本身的悬疑营造很好",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "坂本日常",
+    subs: ["战斗爽"],
+    rating: 5,
+    cover: "./images/坂本日常.png",
+    desc: "想象力！\n顶级分镜设计\n优质男鬼女鬼人设\n可惜推主线就开始烂了，快点完结吧",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "天空侵犯",
+    subs: ["智斗"],
+    rating: 3,
+    cover: "./images/天空侵犯.png",
+    desc: "很早前看的，只记得面具狙击手非常帅",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "境界触发者",
+    subs: ["智斗"],
+    rating: 3,
+    cover: "./images/境界触发者.png",
+    desc: "团队智斗，没对上电波",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "信蜂",
+    subs: ["王道"],
+    rating: 3,
+    cover: "./images/信蜂.png",
+    desc: "一眼看得到头的王道",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "驱魔少年",
+    subs: ["王道"],
+    rating: 3,
+    cover: "./images/驱魔少年.png",
+    desc: "审美积累\n中规中矩的王道\n要是小时候能看到哥特时钟女那我恐怕xp会被影响一辈子",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "杀戮轮回",
+    subs: ["短篇"],
+    rating: 3,
+    cover: "./images/杀戮轮回.png",
+    desc: "很经典的科幻片",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "杀戮都市",
+    subs: ["悬疑"],
+    rating: 3,
+    cover: "./images/杀戮都市.png",
+    desc: "暴力与血浆",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "xxxHOLiC",
+    subs: ["日常"],
+    rating: 3,
+    cover: "./images/xxxHOLiC.png",
+    desc: "审美积累\n没看懂但大受震撼",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "白圣女与黑牧师",
+    subs: ["幻想"],
+    rating: 98,
+    cover: "./images/白圣女与黑牧师.png",
+    desc: "恋爱漫画启蒙作",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "我独自升级",
+    subs: ["Webtoon"],
+    rating: 4,
+    cover: "./images/我独自升级.jpg",
+    desc: "别的不说，至少够爽",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "齐木楠雄的灾难",
+    subs: ["校园"],
+    rating: 2,
+    cover: "./images/齐木楠雄.png",
+    desc: "不喜欢男女主cp",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "别当欧尼酱了",
+    subs: ["日常"],
+    rating: 3,
+    cover: "./images/别当欧尼酱了.png",
+    desc: "我妹妹怎么不会把我变成美少女？？？",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "躲在超市后门吸烟的两人",
+    subs: ["幻想"],
+    rating: 3,
+    cover: "./images/超市后门吸烟两人.png",
+    desc: "牛马最终幻想\n还挺有成年人的韵味",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "胆大党",
+    subs: ["奇幻"],
+    rating: 2,
+    cover: "./images/胆大党.png",
+    desc: "傻逼恋爱戏",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "幼儿园战争",
+    subs: ["战斗爽"],
+    rating: 3,
+    cover: "./images/幼儿园战争.png",
+    desc: "中规中矩",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "我在意的人不是男生",
+    subs: ["幻想"],
+    rating: 4,
+    cover: "./images/CD店里那个男生.png",
+    desc: "画风很独特，前期很好磕，后期有点颓势了\n而且作者好像还搞百合破坏……",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "怪兽八号",
+    subs: ["科幻"],
+    rating: 1,
+    cover: "./images/怪兽八号.png",
+    desc: "粪作",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "雷霆三人行",
+    subs: ["奇幻"],
+    rating: 2,
+    cover: "./images/雷霆三人行.png",
+    desc: "出的时候“雷霆”还没有现在的词义，但现在来看真的很雷霆",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "神乐钵",
+    subs: ["战斗爽"],
+    rating: 5,
+    cover: "./images/神乐钵.png",
+    desc: "This is true 王道\n男二入队篇太爽了\n日本刀+超能力系打斗\n画技在线，设定俗套但剧情发展还算有趣\n作者不会画女角色但男的都挺帅",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "塔之迷宫",
+    subs: ["奇幻"],
+    rating: 3,
+    cover: "./images/塔之迷宫.png",
+    desc: "贰叔那还说啥了总之审美积累……",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "乡下剑圣",
+    subs: ["战斗爽"],
+    rating: 5,
+    cover: "./images/乡下剑圣.png",
+    desc: "全名：鄉下大叔成為劍聖～只是區區鄉下劍術師傅，成大器的弟子們卻不肯放過我～\n写垃圾异世界厕纸小说的原作者现在立刻马上过来给漫改画师磕头这是命令\n欧式兵击战斗\n一招一式一来一回清爽畅快分镜设计清晰明厉\n宿敌对决回味无穷",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "希德尼娅的骑士团",
+    subs: ["奇幻"],
+    rating: 3,
+    cover: "./images/希骑.png",
+    desc: "贰叔沉浸于自己的艺术中……",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "高分少女",
+    subs: ["幻想"],
+    rating: 5,
+    cover: "./images/高分少女.png",
+    desc: "傻逼作者再虐女二我找人弄你",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "你将我们称作恶魔之时",
+    subs: ["悬疑"],
+    rating: 4,
+    cover: "./images/你将我们称作恶魔之时.png",
+    desc: "男主你真的是畜生啊\n非常有争议的作品",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "噬谎者",
+    subs: ["智斗"],
+    rating: 4,
+    cover: "./images/噬谎者.png",
+    desc: "神作但是太费脑子了",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "端脑",
+    subs: ["智斗"],
+    rating: 4,
+    cover: "./images/端脑.png",
+    desc: "国漫黄金期作品，无需多言",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "给不灭的你",
+    subs: ["人生轮回"],
+    rating: 4,
+    cover: "./images/给不灭的你.png",
+    desc: "第一部前中期都很好看，设定发挥的特别感动",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "傀儡马戏团",
+    subs: ["超长篇"],
+    rating: 5,
+    cover: "./images/傀儡马戏团.png",
+    desc: "毫不颓力的长篇布局\n算是我看的最长的一部漫画，整整50来卷\n但是作者草蛇灰线伏脉千里。很好地撑起了整部作品\n在傀儡的造型设计上也让人大饱眼福。感觉完全不输荒木的替身设计\n非常好纯爱非常好兄弟情非常好成长弧线",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "愚者之夜",
+    subs: ["社会探讨"],
+    rating: 4,
+    cover: "./images/愚者之夜.png",
+    desc: "借物喻人，有点深度",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "HellSing",
+    subs: ["战斗爽"],
+    rating: 4,
+    cover: "./images/HellSing.png",
+    desc: "审美积累",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "魂环",
+    subs: ["人生轮回"],
+    rating: 99,
+    cover: "./images/魂环.png",
+    desc: "中期开始看得我哭得停不下来\n轮回设定写的最好的一本\n超多bg超级美味品鉴中……",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "炎拳",
+    subs: ["奇幻"],
+    rating: 5,
+    cover: "./images/炎拳.png",
+    desc: "唯一一个买了实体书并且全部看的实体书的，还是很震撼的\n太早期了，对藤一对没啥好说的",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "亚人",
+    subs: ["智斗"],
+    rating: 5,
+    cover: "./images/亚人.png",
+    desc: "智斗系真神",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "JOJO8",
+    subs: ["智斗"],
+    rating: 4,
+    cover: "./images/JOJO8.png",
+    desc: "康定情歌",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "JOJO7",
+    subs: ["智斗"],
+    rating: 5,
+    cover: "./images/JOJO7.png",
+    desc: "真是……绕了好大一圈啊……",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "关于地球的运动",
+    subs: ["伟大之作"],
+    rating: 10,
+    cover: "./images/地动.png",
+    desc: "太伟大了，人类的求知……",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "爆漫王",
+    subs: ["王道"],
+    rating: 3,
+    cover: "./images/爆漫王.png",
+    desc: "画风优质但原案一般\n画个漫画也要学王道战斗那套搞得越来越无聊，反派比主角塑造的好多了",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "孤高之人",
+    subs: ["自我"],
+    rating: 4,
+    cover: "./images/孤高之人.png",
+    desc: "兄弟我没有完全理解你\n但我感觉你真的很厉害",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "再见绘梨",
+    subs: ["短篇"],
+    rating: 5,
+    cover: "./images/再见绘梨.png",
+    desc: "藤一对作品，懒得评",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "蓦然回首",
+    subs: ["短篇"],
+    rating: 5,
+    cover: "./images/蓦然回首.png",
+    desc: "藤一对被善良人格侵犯后画的",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "大剑",
+    subs: ["奇幻"],
+    rating: 4,
+    cover: "./images/大剑.png",
+    desc: "老资历黄金时期的漫画\n由于非常老所以剧情也比较经典，但是还是很不赖的",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "黄金神威",
+    subs: ["搞笑"],
+    rating: 5,
+    cover: "./images/黄金神威.png",
+    desc: "看的我哭笑不得了\n哥们你怎么\n五分之一的时间是家国大业让人肃然起敬\n四分之一的时间是神经病类人群星闪耀时\n三分之一的时间是热血真情动人潸然泪下\n剩下在搞基。\n其实没有真男同（吗？\n总之真的超级好看，21世纪经典超长篇了",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "杀手寓言",
+    subs: ["黑色幽默"],
+    rating: 5,
+    cover: "./images/杀手寓言.png",
+    desc: "你的黑色幽默真的惊天动地\n真的没见过这么好的黑色幽默，和男女主都对上电波了\n作者画女角色怎么都是一张脸……\n虽然还想看到这群人的后日谈，但感觉故事到这里就可以了",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "葬送的芙莉莲",
+    subs: ["奇幻"],
+    rating: 19,
+    cover: "./images/葬送的芙莉莲.png",
+    desc: "有几个印象很深的镜头\n黄金之国篇绝赞\n但作者已经有点把握不住了吧……",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "剑风传奇",
+    subs: ["邪道"],
+    rating: 5,
+    cover: "./images/剑风传奇.png",
+    desc: "已经变成黑深残原神了，对年幼的我心灵震撼还挺大的",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "只有我不存在的城市",
+    subs: ["悬疑"],
+    rating: 5,
+    cover: "./images/只有我不存在的城市.png",
+    desc: "后日谈令人动容\n轮回救人这一块感觉比夏日重现好\n在悬疑方面非常吊人胃口\n虽然轮回最后也没解释\n但是看完结局一切都释然了，真的太好了\n后日谈补全了男二和男主妈的剧情\n怎么、怎么能写这么好啊！？",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "终将成为你",
+    subs: ["幻想"],
+    rating: 9999,
+    cover: "./images/终将成为你.png",
+    desc: "最伟大的百合漫画",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "即使如此小镇依然不停转动",
+    subs: ["日常"],
+    rating: 5,
+    cover: "./images/小镇转不停.png",
+    desc: "对于日常系来说叙事手法很特别，也因此创造了回味无穷的最终话\n木头阳角女主\n挺青春的，大家都很好",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "玩物",
+    subs: ["Webtoon"],
+    rating: 3,
+    cover: "./images/玩物.jpg",
+    desc: "经典之韩国反校园霸凌，剧情发展挺酷",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "公司与私生活截然不同的两人",
+    subs: ["幻想"],
+    rating: 3,
+    cover: "./images/公司和私生活.jpg",
+    desc: "世界观重塑中……",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "玉川小姐，你拍过AV吗？",
+    subs: ["神人作品"],
+    rating: 5,
+    cover: "./images/玉川小姐.jpg",
+    desc: "让我一瞥迷宫干和碧蓝之海的既视感\n神人作者怎么这么会搞笑",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "Pick me up！",
+    subs: ["Webtoon"],
+    rating: 2,
+    cover: "./images/Pick.jpg",
+    desc: "设定还行，发挥不足",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "快住手！不然我就要喜欢上你了啊",
+    subs: ["幻想"],
+    rating: 4,
+    cover: "./images/快住手.jpg",
+    desc: "相比二人巴士来说有点工业糖精了，但挺搞笑的",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "星剑大师",
+    subs: ["Webtoon"],
+    rating: 5,
+    cover: "./images/星剑大师.jpg",
+    desc: "很纯粹的好故事，剧情纯复仇爽文\n胜在能扎扎实实地叙事、有稳定优质的人设\n也复仇成功并且包饺子了\n而且青梅赢了天降",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "反转练习生",
+    subs: ["Webtoon"],
+    rating: 3,
+    cover: "./images/反转练习生.jpg",
+    desc: "误入变嫁漫画，世界观重塑中……",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "雷雷雷",
+    subs: ["邪道"],
+    rating: 3,
+    cover: "./images/雷雷雷.jpg",
+    desc: "女版怪兽八号，至少看的比怪兽八号舒服",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "即使化作灰烬",
+    subs: ["智斗"],
+    rating: 4,
+    cover: "./images/即使化作灰烬.jpg",
+    desc: "意难平……有相当野心的叙诡布置但英年早逝……",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "天使的青梅变成辣妹了，却让我很心动",
+    subs: ["幻想"],
+    rating: 4,
+    cover: "./images/天使的青梅.jpg",
+    desc: "小口小口吃",
+    effect: "",
+    url: "#"
+  },
+  {
+    title: "SSS级自杀猎人",
+    subs: ["Webtoon"],
+    rating: 4,
+    cover: "./images/SSS级.jpg",
+    desc: "噱头不小的系统流爽文\n少见的狐狸系男主\n前期武林篇的叙事非常动人\n但紧跟着争议极大的女主篇，不是很喜欢这一段天降女王系爱情戏，继续跟了两个篇章就弃了",
+    effect: "",
+    url: "#"
+  }
+];
 
+    
+
+    // 修改前：const state = { sub: "全部", sort: "rating-desc", search: "" };
+    // 修改后：
     const state = {
       sub: "全部",
-      sort: "rating-desc",
+      sort: "original", // 更改默认排序逻辑
       search: ""
     };
 
@@ -666,6 +1695,7 @@
       if (state.sort === "rating-desc") list.sort((a, b) => b.rating - a.rating);
       if (state.sort === "rating-asc") list.sort((a, b) => a.rating - b.rating);
       if (state.sort === "title-asc") list.sort((a, b) => a.title.localeCompare(b.title, 'zh-Hans-CN'));
+      if (state.sort === "original") { /* 保持原顺序，什么都不做 */ }
 
       return list;
     }
@@ -673,7 +1703,9 @@
     function updateHeader(count) {
       resultCount.textContent = count;
       listTitle.textContent = state.sub === "全部" ? "全部漫画" : `${state.sub} 标签下`;
-      listMeta.textContent = state.search ? `关键词：${state.search}` : `按 ${document.querySelector('.sort-btn.active')?.textContent || '评分从高到低'} 排序`;
+      // 根据当前排序类型显示不同的文字
+      const sortText = state.sort === "original" ? "默认顺序" : (document.querySelector('.sort-btn.active')?.textContent || '评分从高到低');
+      listMeta.textContent = state.search ? `关键词：${state.search}` : `按 ${sortText} 排序`;
     }
 
     function renderCards() {
