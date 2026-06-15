@@ -421,6 +421,14 @@
       font-weight: 500; /* 思源黑体的 500 字重非常适合正文阅读，清晰度极高 */         
     }
 
+    @keyframes rainbow {
+      0% { color: #ff7979; }
+      25% { color: #badc58; }
+      50% { color: #7ed6df; }
+      75% { color: #e056fd; }
+      100% { color: #ff7979; }
+    }
+
     @keyframes textShake {
       0% { transform: translate(0, 0); }
       20% { transform: translate(-0.6px, 0.4px); }
@@ -428,6 +436,38 @@
       60% { transform: translate(0.6px, 0.4px); }
       80% { transform: translate(-0.4px, 0.6px); }
       100% { transform: translate(0, 0); }
+    }
+
+    /* ----------- 通用局部特效外挂包 ----------- */
+    .rainbow-shake {
+      display: inline-block;   
+      font-weight: bold;
+      animation: rainbow 3s linear infinite, textShake 0.15s linear infinite;
+    }
+
+    .rainbow-only {
+      display: inline-block;
+      font-weight: bold;
+      animation: rainbow 3s linear infinite;
+    }
+
+    .shake-only {
+      display: inline-block;
+      color: #ff4757;          
+      animation: textShake 0.15s linear infinite;
+    }
+
+    .bold-black {
+      font-weight: 900;       
+      color: #000000;         
+    }
+
+    /* 加粗放大 */
+    .bold-black-pop {
+      font-weight: 900;       
+      color: #000000;         
+      font-size: 1.25em;      
+      line-height: 1.1;         
     }
 
     .bold-black-shake {
@@ -520,52 +560,15 @@
   <script>
     const data = [
       { 
-        title: "海贼王", 
-        subs: ["冒险", "热血", "连载中"], 
+        title: "不觉得村庄建造游戏的NPC也是活生生的人吗", 
+        subs: ["神人作品","电波系"], 
         rating: 5, 
-        cover: "./images/test.png", 
-        desc: "连载数十载的伟大气史诗巨作！\n尾田荣一郎构筑了让人叹为观止的极\n分镜张力的把控已经\n到了化境。尤其是全国大赛\n阶段，最后那几分钟几\n乎完度庞大世界观，空岛篇的浪漫、司法岛的决绝、顶上战争的宏大，再到一个个精妙绝伦的伏笔跨越数百年在如今收拢。这不仅仅是一部漫画，更是长达二十多年的漫长陪伴。每一次看依然会为了当年的热血和梦想而感动落泪。属于男人的极致浪漫莫过于此！", 
+        cover: "./images/电锯人.png", 
+        desc: "第一部足够自由\n第二部有朝就值回票价了，电次什么的无所谓了\n其实也是很喜欢的作品，但追更完第二部好像也没了念头", 
         effect: "",
-        url: "#" 
+        commentImg: "", //"./images/crazy.png", 
+        url: "" 
       },
-      { 
-        title: "电锯人", 
-        subs: ["热血", "奇幻", "邪典"], 
-        rating: 4, 
-        cover: "", 
-        desc: "节奏怪异且分镜神级！\n藤本树的脑洞无法预测，这绝对是一部<span class='bold-black-shake'>不容错过</span>的邪典级当代神作。炎拳之后的精神延续。", 
-        effect: "",
-        commentImg: "./images/crazy.png", 
-        url: "https://manga.bilibili.com/" 
-      },
-      { 
-        title: "灌篮高手", 
-        subs: ["运动", "热血", "完结"], 
-        rating: 5, 
-        cover: "", 
-        desc: "属于青春与汗水的绝对金字塔巅峰经典！\n井上雄彦老师对人体肌肉动态、\n分镜张力的把控已经\n到了化境。尤其是全国大赛\n阶段，最后那几分钟几\n乎完全没有台词的纯纯画\n面交替和无声分镜，其窒息感、紧张感\n和心跳感堪称世界漫画史上的最高级别艺术珍品，无论翻看多少遍，依然让人热血澎湃。‘我的辉煌时刻，就是现在了！’", 
-        effect: "", 
-        url: "#"
-      },
-      { 
-        title: "间谍过家家", 
-        subs: ["喜剧", "日常"], 
-        rating: 4, 
-        cover: "", 
-        desc: "顶尖特工、杀手组织与读心术女儿构成的爆笑伪装家庭日常，阿尼亚可爱就完事了！", 
-        effect: "",
-        url: "#"
-      },
-      { 
-        title: "过家家", 
-        subs: ["搞笑", "日常"], 
-        rating: 4, 
-        cover: "", 
-        desc: "顶尖特工、杀手组织与读心术女儿构成的爆笑伪装家庭日常，阿尼亚可爱就完事了！", 
-        effect: "",
-        commentImg: "./images/crazy.png", 
-        url: "#"
-      }
     ];
 
     const state = {
@@ -588,6 +591,54 @@
     const appContainer = document.querySelector(".app");
 
     function starText(rating) {
+      if(rating < 0){
+        return "-" + "☆".repeat(0-rating);
+      }
+      else if(rating == 114514){
+        return "懒得评";
+      }
+      else if(rating == 67){
+        return "太神了评不了";
+      }
+      else if(rating == 69){
+        return "NSFW";
+      }
+      else if(rating == 2233){
+        return "笑了十天忘记评了";
+      }
+      else if(rating == 555){
+        return "眼睛进沙子了看不清不评了";
+      }
+      else if(rating == 99){
+        return "他们在一起之前我拒绝评分";
+      }
+      else if(rating == 9999){
+        return "狗吃巧克力死了评不了了";
+      }
+      else if(rating == 88){
+        return "再见了所有的评分系统";
+      }
+      else if(rating == 122317){
+        return "少话，电波共鸣中";
+      }
+      else if(rating == 777){
+        return "活着就是为了看这本";
+      }
+      else if(rating == 6246){
+        return "111评分就能找到人一起格斗吗";
+      }
+      else if(rating == 0){
+        return "棍木";
+      }
+      else if(rating == 19){
+        return "那个谁什么时候cos辛美尔了就评";
+      }
+      else if(rating == 98){
+        return "无心评价，正在想念那段宿舍一起看恋爱漫画噢噢噢的时光……";
+      }
+      else if(rating > 5){
+        return "★".repeat(rating);
+      }
       return "★".repeat(rating) + "☆".repeat(5 - rating);
     }
 
