@@ -519,9 +519,63 @@
       .card-index { font-size: 56px; bottom: -4px; }
       .explosion-badge { width: 70px; height: 70px; top: -16px; right: -10px; }
     }
+    /* 右上角音乐按钮固定浮动样式 */
+    .music-toggle-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      z-index: 9999; /* 保证在最顶层 */
+      transition: all 0.3s ease;
+    }
+
+    .music-toggle-btn:hover {
+      transform: scale(1.1);
+      border-color: var(--accent);
+    }
+
+    /* 播放时的旋转动画 */
+    .music-toggle-btn.playing {
+      animation: musicRotate 3s linear infinite;
+      background: var(--accent);
+    }
+
+    .music-toggle-btn.playing .music-icon {
+      filter: brightness(0) invert(1); /* 播放时图标变白 */
+    }
+
+    @keyframes musicRotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* 适配移动端，避免挡住小屏幕内容 */
+    @media (max-width: 768px) {
+      .music-toggle-btn {
+        top: 15px;
+        right: 15px;
+        width: 38px;
+        height: 38px;
+        font-size: 16px;
+      }
+    }
   </style>
 </head>
 <body>
+  <!-- 音乐播放控件 -->
+  <button id="musicToggleBtn" class="music-toggle-btn" title="播放/暂停音乐">
+    <span class="music-icon">🎵</span>
+  </button>
   <div class="app">
     <aside class="sidebar">
       <button id="sidebarCloseBtn" class="sidebar-close-btn" title="收起侧边栏">✕</button>
@@ -595,7 +649,7 @@
         subs: ["搞笑"],
         rating: 5,
         cover: "./images/杀手幼女.png",
-        desc: "起初以为是杀手版你的名字，<span class='bold-pop'>但意外地很有趣啊</span>\n关于东亚母女的题材发挥的很不错",
+        desc: "起初以为是杀手版你的名字，<span class='bold-pop'>但意外地很有趣啊</span>\n经典的黑道幽默，大胆发挥人格交换的设定，吐槽太有活了\n尤其是关于东亚母女的剧情发展",
         effect: "",
         url: "#"
       },
@@ -618,6 +672,24 @@
         url: "#"
       },
       {
+        title: "夏日重现",
+        subs: ["智斗"],
+        rating: 4,
+        cover: "./images/夏日重现.png",
+        desc: "轮回系里面还算不赖的，但结尾不是很喜欢",
+        effect: "",
+        url: "#"
+      },
+      {
+        title: "战队大失格",
+        subs: ["神人作品"],
+        rating: 3,
+        cover: "./images/战队大失格.png",
+        desc: "难以想象这是漫画家能画出来的分镜……\n起初以为是战队版黑袍纠察队，感觉还是不太一样\n剧情有点自由，想法是好的",
+        effect: "",
+        url: "#"
+      },
+      {
         title: "二人巴士",
         subs: ["幻想"],
         rating: 99,
@@ -625,6 +697,15 @@
         desc: "对少年少女那种情窦初开的感觉描写的<span class='rainbow-shake'>特别特别好</span>",
         effect: "",
         commentImg: "./images/crazy.png",
+        url: "#"
+      },
+      {
+        title: "有鬼拍不到",
+        subs: ["搞笑"],
+        rating: 5,
+        cover: "./images/有鬼拍不到.png",
+        desc: "超级引鬼体质VS超绝克鬼体制，你们知道吗\n很萌很神人的一群",
+        effect: "",
         url: "#"
       },
       {
@@ -652,6 +733,15 @@
         rating: 10,
         cover: "./images/加奈子的幸福杀手生活.png",
         desc: "<span class='bold-shake'>不兑！\n说好的搞笑呢！\n</span>女主你就是该干这行的\n但是你不应该干这行<span class='bold-shake'>啊啊啊啊啊啊啊啊啊</span>\n看了真人剧改再来补的，真人剧改得非常好我超级喜欢\n<span class='bold-pop'>加奈子，告诉我，你真的幸福吗</span>",
+        effect: "",
+        url: "#"
+      },
+      {
+        title: "为了与你漫步宇宙",
+        subs: ["校园"],
+        rating: 3,
+        cover: "./images/与你漫步宇宙.png",
+        desc: "还挺有意思的，但没对上电波，应该是cb向吧？",
         effect: "",
         url: "#"
       },
@@ -711,15 +801,7 @@
         commentImg: "./images/crazy.png",
         url: "#"
       },
-      {
-        title: "有鬼拍不到",
-        subs: ["搞笑"],
-        rating: 5,
-        cover: "./images/有鬼拍不到.png",
-        desc: "超级引鬼体质VS超绝克鬼体制，你们知道吗\n很萌很神人的一群",
-        effect: "",
-        url: "#"
-      },
+      
       {
         title: "邻座同学用那种眼神看着我",
         subs: ["幻想"],
@@ -753,16 +835,6 @@
         rating: 4,
         cover: "./images/独狼女孩的单相思.png",
         desc: "全员淡人挺有趣的，男主人设很少见诶（可能是我看得少）",
-        effect: "",
-        url: "#"
-      },
-      
-      {
-        title: "为了与你漫步宇宙",
-        subs: ["校园"],
-        rating: 3,
-        cover: "./images/与你漫步宇宙.png",
-        desc: "还挺有意思的，但没对上电波，应该是cb向吧？",
         effect: "",
         url: "#"
       },
@@ -803,24 +875,7 @@
         effect: "",
         url: "#"
       },
-      {
-        title: "夏日重现",
-        subs: ["智斗"],
-        rating: 4,
-        cover: "./images/夏日重现.png",
-        desc: "轮回系里面还算不赖的，但结尾不是很喜欢",
-        effect: "",
-        url: "#"
-      },
-      {
-        title: "战队大失格",
-        subs: ["神人作品"],
-        rating: 3,
-        cover: "./images/战队大失格.png",
-        desc: "难以想象这是漫画家能画出来的分镜……\n起初以为是战队版黑袍纠察队，感觉还是不太一样\n剧情有点自由，想法是好的",
-        effect: "",
-        url: "#"
-      },
+      
       {
         title: "恋语轻唱",
         subs: ["幻想"],
@@ -1807,6 +1862,66 @@
 
     renderSubNav();
     renderCards();
+
+    // ==================== 音乐播放功能 ====================
+
+    // 1. 【在这里自定义你的音乐列表】！！请把你的歌名填在下面数组里
+    const playlist = [
+      "Vallhalla1.mp3",
+    ];
+
+    // 2. 初始化音频对象和按钮
+    const audio = new Audio();
+    const musicBtn = document.getElementById("musicToggleBtn");
+    let isMusicPlaying = false;
+
+    // 3. 随机挑选一首歌放入播放器，并设置循环播放
+    function initRandomTrack() {
+      if (playlist.length === 0) return;
+      const randomIndex = Math.floor(Math.random() * playlist.length);
+      audio.src = `./music/${playlist[randomIndex]}`;
+      audio.loop = true; // 单曲循环，如果你想播完自动换下一首，可以改成监听 'ended' 事件
+    }
+
+    // 4. 播放与暂停的控制函数
+    function toggleMusic() {
+      if (isMusicPlaying) {
+        audio.pause();
+        musicBtn.classList.remove("playing");
+        isMusicPlaying = false;
+      } else {
+        // 如果播放器还没加载歌曲，先初始化
+        if (!audio.src) {
+          initRandomTrack();
+        }
+        audio.play().then(() => {
+          musicBtn.classList.add("playing");
+          isMusicPlaying = true;
+        }).catch(err => {
+          console.log("播放失败，等待用户交互:", err);
+        });
+      }
+    }
+
+    // 5. 绑定按钮点击事件
+    musicBtn.addEventListener("click", (e) => {
+      e.stopPropagation(); // 阻止冒泡
+      toggleMusic();
+    });
+
+    // 6. 自动播放兼容：用户首次点击页面任意地方时尝试触发播放
+    function autoPlayHandler() {
+      if (!isMusicPlaying) {
+        toggleMusic();
+      }
+      // 触发一次后移除监听，防止影响后续正常点击
+      document.removeEventListener("click", autoPlayHandler);
+    }
+    document.addEventListener("click", autoPlayHandler);
+
+    // 初始化歌曲
+    initRandomTrack();
+    // ====================================================
   </script>
 </body>
 </html>
